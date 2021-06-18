@@ -32,7 +32,6 @@ sqlparse==0.4.1
 uritemplate==3.0.1
 urllib3==1.26.3
 
-
 # داخل سایت اصلی بود
 importlib-metadata==3.6.0
 mysqlclient==2.0.1
