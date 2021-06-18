@@ -1,8 +1,5 @@
 from django.db import models
-
-# Create your models here.
 from django.utils.safestring import mark_safe
-
 from eshop_image.models import Images
 from eshop_product.models import Product
 
