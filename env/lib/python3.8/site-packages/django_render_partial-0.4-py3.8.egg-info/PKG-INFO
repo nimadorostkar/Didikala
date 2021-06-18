@@ -1,0 +1,100 @@
+Metadata-Version: 1.1
+Name: django-render-partial
+Version: 0.4
+Summary: Django render_partial tag allows inserting rendered views into templates
+Home-page: https://github.com/utapyngo/django-render-partial
+Author: utapyngo
+Author-email: ut@pyngo.tom.ru
+License: UNKNOWN
+Description: Installation
+        ============
+        
+        
+        1. ``pip install django_render_partial``
+        2. Add ``'django_render_partial'`` to ``INSTALLED_APPS``
+        3. Ensure that ``'django.template.context_processors.request'`` is in
+           ``TEMPLATES['OPTIONS']['context_processors']``
+        
+        
+        Usage
+        =====
+        
+        Write a template for partial view, e.g. ``partial_view.html``::
+        
+            <p>{{ arg1 }} + {{ arg2 }} = {{ result }}</p>
+        
+        Write a partial view::
+        
+            def partial_view(request, *args, **kwargs):
+                result = kwargs['arg1'] + kwargs['arg2']
+                kwargs['result'] = result
+                return render(request, 'partial_view.html', kwargs)
+        
+        if you are using function-based views, or::
+        
+            class PartialView(TemplateView):
+                template_name = 'partial_view.html'
+        
+                def get_context_data(self, **kwargs):
+                    result = kwargs['arg1'] + kwargs['arg2']
+                    kwargs['result'] = result
+                    return super(PartialView, self).get_context_data(**kwargs)
+        
+        if you are using class-based views.
+        
+        
+        Add it to ``urls.py``::
+        
+            url(r'^partial-view/(?P<arg1>\w+)/(?P<arg2>\w+)/$',
+                partial_view,
+                name='partial_view'),
+        
+        or::
+        
+            url(r'^partial-view/(?P<arg1>\w+)/(?P<arg2>\w+)/$',
+                PartialView.as_view(),
+                name='partial_view'),
+        
+        In your template::
+        
+            {% load render_partial %}
+            {% with some_var=2 %}
+              {% render_partial 'partial_view' arg1=40 arg2=some_var %}
+            {% endwith %}
+        
+        The ``render_partial`` tag would be rendered to::
+        
+            <p>40 + 2 = 42</p>
+        
+        Note that the ``with`` tag above is not required for ``render_partial``
+        to work. It is used to show that ``render_partial`` accepts variables.
+        Every argument will be evaluated against context except for the names of
+        any keyword arguments.
+        
+        If you don't want to expose your partial view in ``urls.py``, you can
+        also use fully qualified dot separated view name::
+        
+          {% render_partial 'partial_test.views.PartialView' arg1=40 arg2=some_var %}
+          {% render_partial 'partial_test.views.partial_view' arg1=40 arg2=some_var %}
+        
+        
+        **IMPORTANT**: the calling template must receive a context variable called
+        ``request`` containing the original ``HttpRequest``. Don't forget to add
+        ``'django.template.context_processors.request'`` to
+        ``TEMPLATES['OPTIONS']['context_processors']``.
+        
+        
+        Adapted from https://djangosnippets.org/snippets/1568/
+        
+Keywords: django,render,partial,view,template,tag
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Operating System :: OS Independent
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Software Development :: Libraries
+Classifier: Topic :: Utilities
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django

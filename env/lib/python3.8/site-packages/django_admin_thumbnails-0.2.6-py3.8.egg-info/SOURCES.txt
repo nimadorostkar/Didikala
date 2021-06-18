@@ -1,0 +1,13 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+admin_thumbnails/__init__.py
+admin_thumbnails/settings.py
+admin_thumbnails/utils.py
+django_admin_thumbnails.egg-info/PKG-INFO
+django_admin_thumbnails.egg-info/SOURCES.txt
+django_admin_thumbnails.egg-info/dependency_links.txt
+django_admin_thumbnails.egg-info/not-zip-safe
+django_admin_thumbnails.egg-info/requires.txt
+django_admin_thumbnails.egg-info/top_level.txt

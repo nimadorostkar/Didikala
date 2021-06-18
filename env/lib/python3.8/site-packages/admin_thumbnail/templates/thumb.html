@@ -1,0 +1,21 @@
+{% load i18n %}
+{% load thumbnail %}
+
+{% block extra_head_content  %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}thumb.css" />
+{% endblock %}
+
+
+<div class="thumbnail">
+{% thumbnail image "190x190" as thumb %}
+    <span>
+        <img src="{{ thumb.url }}" />
+        <br />
+        <a href="{{ image.url }}" target="_blank">{% trans "Open Image" %}</a>
+    </span>
+
+    {% trans "Image" %}
+{% empty %}
+    {% trans "(None)" %}
+{% endthumbnail %}
+</div>
