@@ -15,8 +15,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-# Application definition
 
+
+
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -24,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # my library
     'django_render_partial',
     'ckeditor',
@@ -34,12 +35,10 @@ INSTALLED_APPS = [
     'django_filters',
     'captcha',
     'extensions',
-
     # rest api
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
-
     # my app
     'eshop_account',
     'eshop_attribute',
@@ -96,6 +95,9 @@ WSGI_APPLICATION = 'didikala.wsgi.application'
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'
 
 
+
+
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -105,6 +107,11 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
@@ -123,6 +130,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -136,32 +145,29 @@ USE_L10N = True
 
 USE_TZ = True
 
+
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "assets")
-]
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "assets")]
 STATIC_ROOT = os.path.join(BASE_DIR, "static", "static_root")
-
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media_root")
 # ...
 SITE_ID = 1
+
+
 
 ####################################
 ##  CKEDITOR CONFIGURATION ##
 ####################################
 
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
-
 CKEDITOR_UPLOAD_PATH = 'media_ckeditor/'
 CKEDITOR_IMAGE_BACKEND = "pillow"
-
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': None,
@@ -172,20 +178,20 @@ RECAPTCHA_PUBLIC_KEY = '6Le4K_4ZAAAAAFlxvlemZk5oeKMgrXrmNMtbbZLT'
 RECAPTCHA_PRIVATE_KEY = '6Le4K_4ZAAAAAIE5eYCdFbJrdfSOJUuuASyRVIfX'
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
+
 # REST_FRAMEWORK CONFIGURATION
 
-
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': [
-    #     'rest_framework.authentication.SessionAuthentication',
-    #     'rest_framework.authentication.TokenAuthentication',
-    # ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-    # ],
-    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 5,
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
+     'DEFAULT_AUTHENTICATION_CLASSES': [
+         'rest_framework.authentication.SessionAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
+     ],
+     'DEFAULT_PERMISSION_CLASSES': [
+         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+     ],
+     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+     'PAGE_SIZE': 5,
+     'DEFAULT_FILTER_BACKENDS': (
+     'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
