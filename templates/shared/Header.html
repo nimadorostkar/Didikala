@@ -1,0 +1,220 @@
+{% load static %}
+{% load mptt_tags %}
+{% load humanize %}
+
+<!-- Start header -->
+<header class="main-header js-fixed-topbar dt-sl">
+    <!-- Start ads -->
+        <a href="#" class="ads-header text-center pt-3 hidden-sm" target="_blank"
+           style="background-color: #f5c6cb"><span class="text-center align-content-between">این تنها یک سایت نمونه است و اطلاعات کالاها و قیمت و لیست پرداخت صوری بوده و هرگز به درگاه بانکی متصل نخواهد شد</span></a>
+    <!-- End ads -->
+    <!-- Start topbar -->
+    <div class="container main-container">
+        <div class="topbar dt-sl">
+            <div class="row">
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="logo-area float-right">
+                        <a href="/">
+                            <img src="{% static 'images/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <script>
+                    $(function () {
+                        $("#query").autocomplete({
+                            source: "search_auto/",
+                            select: function (event, ui) { //item selected
+                                AutoCompleteSelectHandler(event, ui)
+                            },
+                            minLength: 2,
+                        });
+                    });
+
+                    function AutoCompleteSelectHandler(event, ui) {
+                        var selectedObj = ui.item;
+                    }
+                </script>
+                <div class="col-lg-6 col-md-5 hidden-sm">
+                    <div class="search-area dt-sl">
+                        <form action="/product_list/search" class="search" method="get">
+                            <input id="query" type="text" value="{{ request.GET.q }}" name='q'
+                                   placeholder="نام کالا، برند و یا دسته مورد نظر خود را جستجو کنید…">
+                            <button type="submit"><img src="{% static 'images/theme/search.png' %}" alt=""></button>
+                            <button class="close-search-result" type="button"><i class="mdi mdi-close"></i></button>
+                            {#                            <div class="search-result" >#}
+                            {#                                <ul id="query">#}
+                            {#                               <a></a>     #}
+                            {#                                </ul>#}
+                            {#                            </div>#}
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-4 col-6 topbar-left">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End topbar -->
+
+    <!-- Start bottom-header -->
+    <div class="bottom-header dt-sl mb-sm-bottom-header">
+        <div class="container main-container">
+            <!-- Start Main-Menu -->
+            <nav class="main-menu dt-sl">
+                <ul class="list float-right hidden-sm">
+                    <!-- dropdown-menu -->
+                    {% recursetree category %}
+
+                        <li class="list-item {% if not node.is_leaf_node %} list-item-has-children {% endif %} menu-col-1">
+                            <a class="nav-link" href="/category/{{ node.slug }}">{{ node.title }}</a>
+                            {% if not node.is_leaf_node %}
+                                <ul class="sub-menu nav">
+                                    {% if not node.is_leaf_node %}
+                                        <li class="list-item ">
+                                            <a class="nav-link" href="/category/{{ node.slug }}">{{ children }}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                        </li>
+
+                    {% endrecursetree %}
+                </ul>
+                <ul class="nav float-left">
+                    <li class="nav-item">
+                        {% if request.user.is_authenticated %}
+                            <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">
+                                <span class="label-dropdown">سبد خرید</span>
+                                <i class="mdi mdi-cart-outline"></i>
+                                <span class="count">{{ shopcart.count }}</span>
+                            </a>
+                            <div class="dropdown-menu cart dropdown-menu-sm dropdown-menu-left">
+                                <div class="dropdown-header">سبد خرید</div>
+                                <div class="dropdown-list-icons">
+                                    {% for rs in shopcart %}
+                                        <a href="/product_detail/{{ rs.product.id }}/{{ rs.product.slug }}"
+                                           class="dropdown-item">
+                                            <div class="dropdown-item-icon">
+                                                {% if rs.variant.image_id  > 0 %}
+                                                    <img src="{{ rs.variant.image }}" alt=""
+                                                         style="height: 40px; width: 40px">
+                                                {% else %}
+                                                    <img src="{{ rs.product.image.url }}" alt=""
+                                                         style="height: 40px; width: 40px">
+                                                {% endif %}
+                                            </div>
+                                            <div class="mr-3">
+                                                {% if rs.product.variant == 'None' %}
+                                                    {{ rs.product.title|truncatechars:10 }}
+                                                    <div class="pt-1">{{ rs.product.price|intcomma:False }} تومان</div>
+                                                {% else %}
+                                                    {{ rs.variant.title|truncatechars:10 }}
+                                                    <div class="pt-1">{{ rs.variant.price|intcomma:False }} تومان</div>
+                                                {% endif %}
+                                            </div>
+
+                                            <button class="remove"
+                                                    onClick="location.href='/cart/remove/{{ rs.id }}'; return confirm('آیا برای حذف محصول از سبد خرید مطمن هستید؟')">
+                                                <i class="mdi mdi-close"></i></button>
+                                        </a>
+
+                                    {% endfor %}
+
+                                </div>
+                                <hr>
+                                <div class="dropdown-footer text-center">
+                                    <div class="dt-sl mb-3">
+                                        <span class="float-right">جمع :</span>
+                                        <span class="float-left">{{ totalPrice|intcomma:False }} تومان</span>
+                                    </div>
+                                    <a href="/cart" class="btn btn-success">مشاهده سبد خرید</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </li>
+                </ul>
+                <ul class="nav float-left">
+                    {% if not request.user.is_authenticated %}
+                        <li class="nav-item account ml-3">
+                            <a class="nav-link " href="{% url 'login' %}" aria-haspopup="true"
+                               aria-expanded="false">
+                                <i class="mdi mdi-login-variant"></i>
+                                <span class="label-dropdown">ورود به حساب کاربری</span>
+                            </a>
+                        </li>
+
+                    {% else %}
+                        <li class="nav-item account dropdown">
+                            <a class="nav-link" href="#" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">
+                                <span class="label-dropdown">حساب کاربری</span>
+                                <i class="mdi mdi-account-circle-outline"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-left">
+                                <a class="dropdown-item" href="/profile">
+                                    <i class="mdi mdi-account-card-details-outline"></i>پروفایل
+                                </a>
+                                <a class="dropdown-item" href="/profile/info">
+                                    <i class="mdi mdi-account-edit-outline"></i>ویرایش حساب کاربری
+                                </a>
+                                <div class="dropdown-divider" role="presentation"></div>
+                                <a class="dropdown-item" href="/logout">
+                                    <i class="mdi mdi-logout-variant"></i>خروج
+                                </a>
+                            </div>
+                        </li>
+                    {% endif %}
+
+                </ul>
+                <button class="btn-menu">
+                    <div class="align align__justify">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+                <div class="side-menu">
+                    <div class="logo-nav-res dt-sl text-center">
+                        <a href="/">
+                            <img src="{% static 'images/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                    <div class="search-box-side-menu dt-sl text-center mt-2 mb-3">
+                        <form action="/product_list/search" method="get">
+                            <input id="query" type="text" value="{{ request.GET.q }}" name='q'
+                                   placeholder="جستجو کنید...">
+                            <i id="mySubmit" class="mdi mdi-magnify"></i>
+                            <button id="mySubmit-bt" type="submit" hidden></button>
+                            <script>$('#mySubmit').click(function () {
+                                $('#mySubmit-bt').click();
+                            });
+                            </script>
+                        </form>
+                    </div>
+                    <ul class="navbar-nav dt-sl">
+                        {% recursetree category %}
+                            <li{% if not node.is_leaf_node %} class="sub-menu" {% endif %}>
+                                <a href="/category/{{ node.slug }}">{{ node.title }}</a>
+                                {% if not node.is_leaf_node %}
+                                    <ul>
+                                        {% if not node.is_leaf_node %}
+                                            <li>
+                                                <a href="/category/{{ node.slug }}">{{ children }}</a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                {% endif %}
+                            </li>
+                        {% endrecursetree %}
+                    </ul>
+                </div>
+                <div class="overlay-side-menu">
+                </div>
+            </nav>
+            <!-- End Main-Menu -->
+        </div>
+    </div>
+    <!-- End bottom-header -->
+</header>
+<!-- End header -->

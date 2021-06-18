@@ -1,0 +1,20 @@
+{% load humanize %}
+{% load static %}
+{% if colors %}
+    <input type="hidden" name="size" id="size" value="{{ size_id }}">
+    <ul class="product-variants float-right ml-3">
+        {% for rs in colors %}
+            <li class="ui-variant">
+                <label class="ui-variant ui-variant--color">
+                                                        <span class="ui-variant-shape"
+                                                              style="background-color: {{ rs.color.code }}"></span>
+                    <input type="radio" class="variant-selector"
+                            {% if variant.id == rs.id %} checked {% endif %}
+                           name="variantid" id="variantid" value="{{ rs.id }}"
+                           onchange="this.form.submit()" ;>
+                    <span class="ui-variant--check"> {{ rs.color.name }}</span>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

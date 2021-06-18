@@ -1,0 +1,46 @@
+{% load static %}
+{% load render_partial %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#f7858d">
+    <meta name="msapplication-navbutton-color" content="#f7858d">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f7858d">
+
+    <title>{% block title %}
+        فروشگاه اسکای‌کالا
+    {% endblock %}
+    </title>
+    <meta name="keywords" content="{% block keywords %} فروشگاه اسکای‌کالا {% endblock %}">
+    <meta name="description" content="{% block description %} فروشگاه اسکای‌کالا  {% endblock %}">
+
+    {% include 'shared/_HeaderReferences.html' %}
+
+    {% block header_ref %}
+        <!--if we have another references for any pages we can add here-->
+    {% endblock %}
+
+</head>
+<body>
+<div class="wrapper" style="transform: none;">
+
+    {% render_partial 'header' %}
+
+    {% block content %}{% endblock %}
+
+    {% render_partial 'footer' %}
+</div>
+    {% include 'shared/_FooterReferences.html' %}
+
+
+
+{% block footer_ref %}
+    <!--if we have another references for any pages we can add here-->
+{% endblock %}
+</body>
+</html>

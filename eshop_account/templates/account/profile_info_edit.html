@@ -1,0 +1,127 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load render_partial %}
+{% load humanize %}
+
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    حساب کاربری {{ profile.user.first_name }} {{ profile.user.last_name }}
+{% endblock %}
+
+{% block description %}
+    حساب کاربری{{ profile.user.first_name }} {{ profile.user.last_name }}
+{% endblock %}
+
+{% block keyword %}
+    حساب کاربری
+{% endblock %}
+
+{% block content %}
+
+    <main class="main-content dt-sl mt-4 mb-3" style="transform: none;">
+        <div class="container main-container" style="transform: none;">
+            <div class="row" style="transform: none;">
+                <!-- Start Sidebar -->
+                {% render_partial 'profile_sidebar' %}
+                <!-- End Sidebar -->
+
+                <!-- Start Content -->
+                <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                    <div class="row">
+                        <div class="col-md-10 col-sm-12 mx-auto">
+                            <div class="px-3 px-res-0">
+                                <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
+                                    <h2>ویرایش اطلاعات شخصی</h2>
+                                </div>
+                                <div class="form-ui additional-info dt-sl dt-sn pt-4">
+                                    <form method="POST" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="form-row-title">
+                                            <h3>نام</h3>
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="text" class="input-ui pr-2" name="first_name"
+                                                   placeholder="نام خود را وارد نمایید"
+                                                   value="{{ profile.user.first_name }}">
+                                        </div>
+                                        <div class="form-row-title">
+                                            <h3>نام خانوادگی</h3>
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="text" class="input-ui pr-2" name="last_name"
+                                                   placeholder="نام خانوادگی خود را وارد نمایید"
+                                                   value="{{ profile.user.last_name }}">
+                                        </div>
+                                        <div class="form-row-title">
+                                            <h3>کد ملی</h3>
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="text" class="input-ui pl-2 text-left dir-ltr"
+                                                   name="national_code" placeholder="شماره ملی خود را وارد کنید" value="{{ profile.national_code }}">
+                                        </div>
+                                        <div class="form-row-title">
+                                            <h3>شماره موبایل</h3>
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="text" class="input-ui pl-2 text-left dir-ltr" name="phone"
+                                                   placeholder="شماره موبایل خود را وارد نمایید"
+                                                   value="{{ profile.phone }}">
+                                        </div>
+                                        <div class="form-row-title">
+                                            <h3>آدرس ایمیل</h3>
+                                        </div>
+                                        <div class="form-row">
+                                            <input type="email" class="input-ui pl-2 text-left dir-ltr" name="email"
+                                                   placeholder="آدرس ایمیل خود را وارد نمایید"
+                                                   value="{{ profile.user.email }}">
+                                        </div>
+                                        <div class="form-row-title">
+                                            <h3>عکس پروفایل</h3>
+                                        </div>
+                                        <div class="form-row mt-2">
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="inputGroupFile04"
+                                                           name="image"
+                                                           aria-describedby="inputGroupFileAddon04">
+                                                    <label class="custom-file-label" for="inputGroupFile04">انتخاب
+                                                        عکس</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="dt-sl">
+                                            <div class="form-row mt-3 justify-content-center">
+                                                <button class="btn-primary-cm btn-with-icon ml-2">
+                                                    <i class="mdi mdi-account-circle-outline"></i>
+                                                    ثبت اطلاعات کاربری
+                                                </button>
+                                                <button class="btn-primary-cm bg-secondary">انصراف</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+
+            {% render_partial 'product_slider' %}
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block footer_ref %}
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+{% endblock %}

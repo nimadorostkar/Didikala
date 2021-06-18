@@ -1,0 +1,93 @@
+{% load static %}
+<!-- Start footer -->
+<footer class="main-footer dt-sl">
+    <div class="back-to-top">
+        <a href="#"><span class="icon"><i class="mdi mdi-chevron-up"></i></span> <span>بازگشت به
+                        بالا</span></a>
+    </div>
+    <div class="container main-container">
+        <div class="footer-services">
+            <div class="row">
+                <div class="service-item col">
+                    <a href="#" target="_blank">
+                        <img src="{% static 'images/svg/delivery.svg' %}">
+                    </a>
+                    <p>تحویل اکسپرس</p>
+                </div>
+                <div class="service-item col">
+                    <a href="#" target="_blank">
+                        <img src="{% static 'images/svg/contact-us.svg' %}">
+                    </a>
+                    <p>پشتیبانی 24 ساعته</p>
+                </div>
+                <div class="service-item col">
+                    <a href="#" target="_blank">
+                        <img src="{% static 'images/svg/payment-terms.svg' %}">
+                    </a>
+                    <p>پرداخت درمحل</p>
+                </div>
+                <div class="service-item col">
+                    <a href="#" target="_blank">
+                        <img src="{% static 'images/svg/return-policy.svg' %}">
+                    </a>
+                    <p>۷ روز ضمانت بازگشت</p>
+                </div>
+                <div class="service-item col">
+                    <a href="#" target="_blank">
+                        <img src="{% static 'images/svg/origin-guarantee.svg' %}">
+                    </a>
+                    <p>ضمانت اصل بودن کالا</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-widgets">
+            <div class="row">
+                <div class="col-12 col-md-6 col-lg-3">
+                    <div class="widget-menu widget card">
+                        <header class="card-header">
+                            <h3 class="card-title">با تاپ کالا</h3>
+                        </header>
+                        <ul class="footer-menu">
+                            <li>
+                                <a href="/contact_us">تماس با تاپ کالا</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'faq_page' %}">پاسخ به پرسش‌های متداول</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="description">
+        <div class="container main-container">
+            <div class="row">
+                <div class="site-description col-12 col-lg-7">
+                    <h1 class="site-title">{{ site_info.title }}</h1>
+                    <p>
+                        تاپ کالا به عنوان یکی از قدیمی‌ترین فروشگاه های اینترنتی با بیش از یک دهه تجربه، با
+                        پایبندی به سه اصل کلیدی، پرداخت در
+                        محل، 7 روز ضمانت بازگشت کالا و تضمین اصل‌بودن کالا، موفق شده تا همگام با فروشگاه‌های
+                        معتبر جهان، به بزرگ‌ترین فروشگاه
+                        اینترنتی ایران تبدیل شود. به محض ورود به تاپ کالا با یک سایت پر از کالا رو به رو
+                        می‌شوید! هر آنچه که نیاز دارید و به
+                        ذهن شما خطور می‌کند در اینجا پیدا خواهید کرد.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container main-container">
+            <p class="text-danger">
+                استفاده از مطالب فروشگاه اینترنتی تاپ کالا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع است.
+                کلیه حقوق این سایت متعلق
+                به شرکت نوآوران فن آوازه (فروشگاه آنلاین تاپ کالا) می‌باشد.
+            </p>
+        </div>
+    </div>
+</footer>
+<!-- End footer -->

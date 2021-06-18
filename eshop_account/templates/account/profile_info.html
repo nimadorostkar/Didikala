@@ -1,0 +1,100 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load render_partial %}
+{% load humanize %}
+
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    حساب کاربری {{ profile.user.first_name }} {{ profile.user.get_last_name }}
+{% endblock %}
+
+{% block description %}
+    حساب کاربری{{ profile.user.first_name }} {{ profile.user.last_name }}
+{% endblock %}
+
+{% block keyword %}
+    حساب کاربری
+{% endblock %}
+
+{% block content %}
+
+    <main class="main-content dt-sl mt-4 mb-3" style="transform: none;">
+        <div class="container main-container" style="transform: none;">
+            <div class="row" style="transform: none;">
+                <!-- Start Sidebar -->
+                {% render_partial 'profile_sidebar' %}
+                <!-- End Sidebar -->
+
+                <!-- Start Content -->
+                <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="px-3">
+                                <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2">
+                                    <h2>اطلاعات شخصی</h2>
+                                </div>
+                                <div class="profile-section dt-sl">
+                                    <div class="row">
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>نام و نام خانوادگی:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>{{ profile.user.first_name }} {{ profile.user.last_name }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>پست الکترونیک:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>{{ profile.user.email }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>شماره تلفن همراه:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>{{ profile.phone }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-12">
+                                            <div class="label-info">
+                                                <span>کد ملی:</span>
+                                            </div>
+                                            <div class="value-info">
+                                                <span>{{ profile.national_code }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="profile-section-link">
+                                        <a href="{% url 'profile_info_edit' %}" class="border-bottom-dt">
+                                            <i class="mdi mdi-account-edit-outline"></i>
+                                            ویرایش اطلاعات شخصی
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+
+            {% render_partial 'product_slider' %}
+
+        </div>
+    </main>
+
+{% endblock %}
+
+{% block footer_ref %}
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+{% endblock %}

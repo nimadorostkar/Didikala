@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fa">
+{% load static %}
+{% load humanize %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#f7858d">
+    <meta name="msapplication-navbutton-color" content="#f7858d">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f7858d">
+    <title>Shopping Page</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}">
+    <!-- Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/jquery.horizontalmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'css/vendor/materialdesignicons.min.css' %}">
+
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+</head>
+
+<body>
+
+<div class="wrapper shopping-page">
+
+    <!-- Start header-shopping -->
+    <header class="header-shopping dt-sl">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center pt-2">
+                    <div class="header-shopping-logo dt-sl">
+                        <a href="#">
+                            <img src="{% static 'images/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <ul class="checkout-steps">
+                        <li>
+                            <a href="#" class="active">
+                                <span>اطلاعات ارسال</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>پرداخت</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>اتمام خرید و ارسال</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End header-shopping -->
+
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+
+            <div class="row">
+                <div class="cart-page-content col-xl-9 col-lg-8 col-12 px-0">
+                    <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                        <h2>انتخاب آدرس تحویل سفارش</h2>
+                    </div>
+                    <section class="page-content dt-sl">
+                        <div class="address-section">
+                            <div class="checkout-contact dt-sn rounded-0 px-0 pt-0 pb-0">
+                                <div class="checkout-contact-content">
+                                    {% if addresses %}
+                                        <ul class="checkout-contact-items">
+                                            <li class="checkout-contact-item">
+                                                گیرنده:
+                                                <span class="full-name">{{ selected_ad.full_name }}</span>
+                                            </li>
+                                            <li class="checkout-contact-item">
+                                                <div class="checkout-contact-item checkout-contact-item-mobile">
+                                                    شماره تماس:
+                                                    <span class="mobile-phone">{{ selected_ad.phone }}</span>
+                                                </div>
+                                                <div class="checkout-contact-item-message">
+                                                    کد پستی:
+                                                    <span class="post-code">{{ selected_ad.post_code }}</span>
+                                                </div>
+                                                <br>
+                                                استان
+                                                <span class="state">{{ selected_ad.ostan }}</span>
+                                                ، ‌شهر
+                                                <span class="city">{{ selected_ad.city }}</span>
+                                                ،
+                                                <span class="address-part">{{ selected_ad.address }}</span>
+                                            </li>
+                                        </ul>
+                                        <a class="checkout-contact-location" id="btn-checkout-contact-location">تغییر
+                                            آدرس
+                                            ارسال</a>
+                                        <div class="checkout-contact-badge">
+                                            <i class="mdi mdi-check-bold"></i>
+                                        </div>
+                                        </div>
+
+                                        <div class="checkout-address dt-sn px-0 pt-0 pb-0 rounded-0"
+                                             id="user-address-list-container">
+                                            <div class="checkout-address-content">
+                                                <div class="checkout-address-headline">آدرس مورد نظر خود را جهت تحویل
+                                                    انتخاب فرمایید:
+                                                </div>
+                                                <div class="checkout-address-row">
+                                                    <div class="checkout-address-col">
+                                                        <button class="checkout-address-location" data-toggle="modal"
+                                                                data-target="#modal-location">
+                                                            <strong>ایجاد آدرس جدید</strong>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                {% for ad in addresses %}
+                                                    <div class="checkout-address-row">
+                                                        <div class="checkout-address-col">
+                                                            <div class="checkout-address-box">
+                                                                <h5 class="checkout-address-title">{{ ad.full_name }}</h5>
+                                                                <p class="checkout-address-text">
+                                                                    <span>{{ ad.address }}</span>
+                                                                </p>
+                                                                <ul class="checkout-address-list">
+                                                                    <li>
+                                                                        <ul class="checkout-address-contact-info">
+                                                                            <li>کدپستی: <span>{{ ad.post_code }}</span>
+                                                                            </li>
+                                                                            <li>شماره همراه: <span>{{ ad.phone }}</span>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </li>
+                                                                    <li>
+                                                                        <ul>
+                                                                            <li>
+                                                                                <button class="checkout-address-btn-edit"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#modal-location-edit{{ ad.id }}">
+                                                                                    ویرایش
+                                                                                </button>
+                                                                            </li>
+                                                                            <li>
+                                                                                <button class="checkout-address-btn-remove"
+                                                                                        data-toggle="modal"
+                                                                                        data-target="#remove-location{{ ad.id }}">
+                                                                                    حذف
+                                                                                </button>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </li>
+                                                                </ul>
+                                                                {% if ad.selected is True %}
+                                                                    <button class="checkout-address-btn-submit"
+                                                                            style=" background-color: #f7858d; color: #fff;"
+                                                                            onClick="location.href='{% url 'selected_address' ad.id %}'">
+                                                                        سفارش به این آدرس
+                                                                        ارسال می‌شود.
+                                                                    </button>
+                                                                {% else %}
+                                                                    <button class="checkout-address-btn-submit"
+                                                                            onClick="location.href='{% url 'selected_address' ad.id %}'">
+                                                                        ارسال سفارش
+                                                                        به این
+                                                                        آدرس
+                                                                    </button>
+                                                                {% endif %}
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Start Modal location edit -->
+                                                    <div class="modal fade" id="modal-location-edit{{ ad.id }}"
+                                                         role="dialog"
+                                                         aria-labelledby="exampleModalCenterTitle"
+                                                         data-backdrop="false"
+                                                         aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg send-info modal-dialog-centered"
+                                                             role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title"
+                                                                        id="exampleModalCenterTitle">
+                                                                        <i class="now-ui-icons location_pin"></i>
+                                                                        ویرایش آدرس
+                                                                    </h5>
+                                                                    <button type="button" class="close"
+                                                                            data-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="row">
+                                                                        <div class="col-lg-12 col-md-12">
+                                                                            <div class="form-ui dt-sl">
+                                                                                <form class="form-account"
+                                                                                      action="{% url 'edit_address' ad.id %}"
+                                                                                      method="post">
+                                                                                    {% csrf_token %}
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-6 col-sm-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    نام و نام خانوادگی
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                                                                <input class="input-ui pr-2 text-right"
+                                                                                                       type="text"
+                                                                                                       name="full_name"
+                                                                                                       value="{{ ad.full_name }}"
+                                                                                                       placeholder="">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-6 col-sm-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    شماره موبایل
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                                                                <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                                       type="text"
+                                                                                                       name="phone"
+                                                                                                       value="{{ ad.phone }}"
+                                                                                                       placeholder="">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-6 col-sm-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    استان
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                                                                <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                                       type="text"
+                                                                                                       name="ostan"
+                                                                                                       value="{{ ad.ostan }}"
+                                                                                                       placeholder="">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-6 col-sm-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    شهر
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                                                                <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                                       type="text"
+                                                                                                       name="city"
+                                                                                                       value="{{ ad.city }}"
+                                                                                                       placeholder="">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    آدرس پستی
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                    <textarea class="input-ui pr-2 text-right" name="address"
+                                                              placeholder="">{{ ad.address }}</textarea>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-12 mb-2">
+                                                                                            <div class="form-row-title">
+                                                                                                <h4>
+                                                                                                    کد پستی
+                                                                                                </h4>
+                                                                                            </div>
+                                                                                            <div class="form-row">
+                                                                                                <input class="input-ui pl-2 dir-ltr text-left placeholder-right"
+                                                                                                       name="post_code"
+                                                                                                       value="{{ ad.post_code }}"
+                                                                                                       type="text"
+                                                                                                       placeholder=" ">
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-12 pr-4 pl-4">
+                                                                                            <button type="submit"
+                                                                                                    class="btn btn-sm btn-primary btn-submit-form">
+                                                                                                ثبت
+                                                                                                و
+                                                                                                ارسال به این آدرس
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </form>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Modal location edit -->
+
+                                                    <!-- Start Modal remove-location -->
+                                                    <div class="modal fade remove-locations"
+                                                         id="remove-location{{ ad.id }}"
+                                                         data-backdrop="false" role="dialog"
+                                                         aria-labelledby="exampleModalLabel"
+                                                         aria-hidden="true" style="">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title mb-3" id="exampleModalLabel">
+                                                                        آیا
+                                                                        مطمئنید
+                                                                        که
+                                                                        این آدرس حذف شود؟</h5>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button"
+                                                                            class="remodal-general-alert-button remodal-general-alert-button--cancel"
+                                                                            data-dismiss="modal">خیر
+                                                                    </button>
+                                                                    <button type="submit"
+                                                                            onClick="location.href='{% url 'remove_address' ad.id %}'"
+                                                                            class="remodal-general-alert-button remodal-general-alert-button--approve">
+                                                                        بله
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Modal remove-location -->
+                                                {% endfor %}
+                                            </div>
+                                            <button class="checkout-address-cancel"
+                                                    id="cancel-change-address-btn"></button>
+                                        </div>
+                                    {% else %}
+                                        <div class="checkout-address-content">
+                                            <div class="checkout-address-row">
+                                                <div class="checkout-address-col">
+                                                    <button class="checkout-address-location" data-toggle="modal"
+                                                            data-target="#modal-location">
+                                                        <strong>ایجاد آدرس جدید</strong>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                <!-- Start Modal location new -->
+                                <div class="modal fade" id="modal-location" role="dialog"
+                                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg send-info modal-dialog-centered"
+                                         role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalCenterTitle">
+                                                    <i class="now-ui-icons location_pin"></i>
+                                                    افزودن آدرس جدید
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-12">
+                                                        <div class="form-ui dt-sl">
+                                                            <form class="form-account" action="{% url 'add_address' %}"
+                                                                  method="post">
+                                                                {% csrf_token %}
+                                                                <div class="row">
+                                                                    <div class="col-md-6 col-sm-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                نام و نام خانوادگی
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <input class="input-ui pr-2 text-right"
+                                                                                   type="text" name="full_name"
+                                                                                   placeholder="نام خود را وارد نمایید">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                شماره موبایل
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                   type="text" name="phone"
+                                                                                   placeholder="09xxxxxxxxx">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                استان
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                   type="text" name="ostan"
+                                                                                   placeholder="مثلا تهران">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 col-sm-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                شهر
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <input class="input-ui pl-2 dir-ltr text-left"
+                                                                                   type="text" name="city"
+                                                                                   placeholder="مثلا شهریار">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                آدرس پستی
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                    <textarea class="input-ui pr-2 text-right" name="address"
+                                                              placeholder=" آدرس تحویل گیرنده را وارد نمایید"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 mb-2">
+                                                                        <div class="form-row-title">
+                                                                            <h4>
+                                                                                کد پستی
+                                                                            </h4>
+                                                                        </div>
+                                                                        <div class="form-row">
+                                                                            <input class="input-ui pl-2 dir-ltr text-left placeholder-right"
+                                                                                   name="post_code"
+                                                                                   type="text"
+                                                                                   placeholder=" کد پستی را بدون خط تیره بنویسید">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-12 pr-4 pl-4">
+                                                                        <button type="submit"
+                                                                                class="btn btn-sm btn-primary btn-submit-form">
+                                                                            ثبت
+                                                                            و
+                                                                            ارسال به این آدرس
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal location new -->
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function wayss() {
+                                var waw_ch = document.querySelector('input[name=way]:checked').id;
+                                document.querySelector('.cc').setAttribute('action', '/way_selected/' + waw_ch);
+                                document.getElementById('myHiddenButton').click();
+                            };
+                        </script>
+                        <form method="POST" id="shipping-data-form" class="dt-sn pt-3 pb-3 cc"
+                              enctype='multipart/form-data'>
+                            {% csrf_token %}
+
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                                <h2>انتخاب نحوه ارسال</h2>
+                            </div>
+                            <div class="checkout-shipment mb-4">
+                                {% for ways in all_ways %}
+                                    <div class="custom-control custom-radio pl-0 pr-3">
+                                        <input type="radio" class="custom-control-input" name="way" id="{{ ways.id }}"
+                                               value="{{ ways.way }}" onclick="wayss()"
+                                               {% if ways.selected is True %}checked{% endif %}>
+                                        <label for="{{ ways.id }}" class="custom-control-label">
+                                            {{ ways.way }}
+                                        </label>
+                                    </div>
+                                {% endfor %}
+                                <button type="submit" id="myHiddenButton" hidden class="save btn btn-default">GO!
+                                </button>
+                            </div>
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                                <h2> {{ totalCount }}مرسوله</h2>
+                            </div>
+                            <div class="checkout-pack">
+                                <section class="products-compact">
+                                    <!-- Start Product-Slider -->
+                                    <div class="col-12">
+                                        <div class="products-compact-slider carousel-md owl-carousel owl-theme">
+                                            {% for rs in shopcart %}
+                                                {% if rs.product.variant == 'None' %}
+                                                    <div class="item">
+                                                        <div class="product-card mb-3">
+                                                            <a class="product-thumb"
+                                                               href="{{ rs.product.get_absolute_url }}">
+                                                                <img src="{{ rs.product.image.url }}"
+                                                                     style="width: 210px; height: 115px"
+                                                                     alt="Product Thumbnail">
+                                                            </a>
+                                                            <div class="product-card-body">
+                                                                <h6 class="product-title">
+                                                                    <a href="{{ rs.product.get_absolute_url }}">{{ rs.product.title|truncatechars:20 }}</a>
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                {% else %}
+                                                    <div class="item">
+                                                        <div class="product-card mb-3">
+                                                            <a class="product-thumb"
+                                                               href="{{ rs.product.get_absolute_url }}">
+                                                                {% if rs.variant.image_id  > 0 %}
+                                                                    <img src="{{ rs.variant.image }}"
+                                                                         style="width: 210px; height: 115px"
+                                                                         alt="Product Thumbnail">
+                                                                {% else %}
+                                                                    <img src="{{ rs.product.image.url }}"
+                                                                         style="width: 210px; height: 115px"
+                                                                         alt="Product Thumbnail">
+                                                                {% endif %}
+                                                            </a>
+                                                            <div class="product-card-body">
+                                                                <h6 class="product-title">
+                                                                    <a href="{{ rs.product.get_absolute_url }}">{{ rs.variant.title|truncatechars:20 }}</a>
+                                                                </h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                        </div>
+                                    </div>
+                                    <!-- End Product-Slider -->
+                                </section>
+                            </div>
+                        </form>
+                        <div class="mt-5">
+                            <a href="{% url 'ShopCart' %}" class="float-right border-bottom-dt"><i
+                                    class="mdi mdi-chevron-double-right"></i>بازگشت به سبد خرید</a>
+
+                        </div>
+                    </section>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-12 w-res-sidebar sticky-sidebar">
+                    <div class="dt-sn mb-2">
+                        <ul class="checkout-summary-summary">
+                            <li>
+                                <span>مبلغ کل ({{ totalCount }} کالا)</span><span>{{ totalPrice|intcomma:False }} تومان</span>
+                            </li>
+
+                            <li>
+                                    <span>هزینه ارسال<span class="help-sn" data-toggle="tooltip" data-html="true"
+                                                           data-placement="bottom"
+                                                           title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>هزینه ارسال مرسولات می‌تواند وابسته به شهر و آدرس گیرنده متفاوت باشد. در صورتی که هر یک از مرسولات حداقل ارزشی برابر با ۱۵۰هزار تومان داشته باشد، آن مرسوله بصورت رایگان ارسال می‌شود.<br>'حداقل ارزش هر مرسوله برای ارسال رایگان، می تواند متغیر باشد.'</p></div>">
+                                            <span class="mdi mdi-information-outline"></span>
+                                        </span></span><span>{% if selected_way.price == 0 %} رایگان
+                                {% else %}{{ selected_way.price|intcomma:False }} تومان {% endif %}</span>
+                            </li>
+
+                        </ul>
+                        <div class="checkout-summary-devider">
+                            <div></div>
+                        </div>
+                        <div class="checkout-summary-content">
+                            <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                            <div class="checkout-summary-price-value">
+                                <span class="checkout-summary-price-value-amount">{{ totalPriceWithPost|intcomma:False }}</span>
+                                تومان
+                            </div>
+                            <form {% if selected_ad %}action="{% url 'pay_page' %}" method="post" {% endif %}>
+                                {% csrf_token %}
+                                <a href="" class="mb-2 d-block">
+                                    <button class="btn-primary-cm btn-with-icon w-100 text-center pr-0 pl-0"
+                                            type="submit">
+                                        <i class="mdi mdi-arrow-left"></i>
+                                        تایید و ادامه ثبت سفارش
+                                    </button>
+                                </a>
+                            </form>
+                            <div>
+                                {% if not selected_ad %}
+                                    <span class="btn-info text-center px-2 mr-2 py-1  mb-3">
+                                       برای ادامه ثبت سفارش بایدآدرس خود را ثبت کنید
+                                    </span>
+                                    <span class="btn-info text-center px-2 mr-2 py-1  mb-3">
+                                       تنها یک سایت تستی است و به درگاه بانکی متصل نخواهید شد
+                                    </span>
+                                {% else %}
+                                    <span class="btn-info text-center px-2 mr-2 py-1  mb-3">
+                                       تنها یک سایت تستی است و به درگاه بانکی متصل نخواهید شد
+                                    </span>
+                                    <span>
+                                        کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش
+                                        مراحل بعدی را تکمیل کنید.
+                                    </span>
+
+                                    <span class="help-sn" data-toggle="tooltip" data-html="true"
+                                          data-placement="bottom"
+                                          title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش برای شما رزرو می‌شوند. در صورت عدم ثبت سفارش، دیجی‌کالا هیچگونه مسئولیتی در قبال تغییر قیمت یا موجودی این کالاها ندارد.</p></div>">
+                                        <span class="mdi mdi-information-outline"></span>
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dt-sn checkout-feature-aside pt-4">
+                        <ul>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/return-policy.svg' %}" alt="">
+                                هفت روز ضمانت تعویض
+                            </li>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/payment-terms.svg' %}" alt="">
+                                پرداخت در محل با کارت بانکی
+                            </li>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/delivery.svg' %}" alt="">
+                                تحویل اکسپرس
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- End main-content -->
+
+    <!-- Start mini-footer -->
+    <footer class="mini-footer dt-sl">
+        <div class="container main-container">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 text-right">
+                    <i class="mdi mdi-email-outline"></i>
+                    آدرس ایمیل : <a href="">s.tohidi22@gmail.com</a>
+                </div>
+                <div class="col-12 text-center mt-2">
+                    <p class="text-secondary text-footer">
+
+                    </p>
+                </div>
+                <div class="col-12 text-center">
+                    <div class="copy-right-mini-footer">
+                        یک سایت تستی است و تمامی اطلاعات صوری است و به درگاه بانک متصل نخواهید شد
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End mini-footer -->
+
+</div>
+
+<!-- colorPanel -->
+
+<!-- end colorPanel -->
+<!-- Core JS Files -->
+<script src="{% static 'js/vendor/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/vendor/popper.min.js' %}"></script>
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<!-- Plugins -->
+<script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.horizontalmenu.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+<script src="{% static 'js/vendor/wNumb.js' %}"></script>
+<script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+<script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+<!-- google map js -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAq7MrCR1A2qIShmjbtLHSKjcEIEBEEwM"></script>
+<script>
+    // When the window has finished loading create our google map below
+    google.maps.event.addDomListener(window, 'load', init);
+
+    function init() {
+        // Basic options for a simple Google Map
+        // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+        var mapOptions = {
+            // How zoomed in you want the map to start at (always required)
+            zoom: 11,
+
+            scrollwheel: false,
+
+            // The latitude and longitude to center the map (always required)
+            center: new google.maps.LatLng(23.761226, 90.420766), // New York
+
+            // How you would like to style the map.
+            // This is where you would paste any style found on Snazzy Maps.
+            styles: [{
+                "featureType": "administrative",
+                "elementType": "labels.text.fill",
+                "stylers": [{
+                    "color": "#444444"
+                }]
+            },
+                {
+                    "featureType": "landscape",
+                    "elementType": "all",
+                    "stylers": [{
+                        "color": "#f2f2f2"
+                    }]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [{
+                        "saturation": -100
+                    },
+                        {
+                            "lightness": 45
+                        }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "simplified"
+                    }]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [{
+                        "color": "#314453"
+                    },
+                        {
+                            "visibility": "on"
+                        }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "lightness": "-12"
+                    },
+                        {
+                            "saturation": "0"
+                        },
+                        {
+                            "color": "#4bc7e9"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        // Get the HTML DOM element that will contain your map
+        // We are using a div with id="map" seen below in the <body>
+        var mapNew = document.getElementById('map');
+        var mapEdit = document.getElementById('map-edit');
+
+        // Create the Google Map using our element and options defined above
+        var map = new google.maps.Map(mapNew, mapOptions);
+        var mapEdit = new google.maps.Map(mapEdit, mapOptions);
+
+        // Let's also add a marker while we're at it
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(23.761226, 90.420766),
+            map: map,
+            title: 'Snazzy!'
+        });
+    }
+</script>
+<!-- Main JS File -->
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

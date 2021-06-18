@@ -1,0 +1,121 @@
+{% load static %}
+{% load humanize %}
+
+<!-- Start Sidebar -->
+<div class="col-xl-3 col-lg-4 col-md-4 col-sm-12 sticky-sidebar"
+     style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+    <div class="theiaStickySidebar"
+         style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none; left: 1124.6px; top: 0px;">
+        <div class="dt-sl dt-sn mb-3 text-center">
+            <a href="">
+                <img src="{% static 'images/banner/sidebar-banner-3.jpg' %}" class="img-fluid"
+                     alt="">
+            </a>
+        </div>
+        <div class="profile-sidebar dt-sl">
+            <div class="dt-sl dt-sn mb-3">
+                <div class="profile-sidebar-header dt-sl">
+                    <div class="profile-avatar float-right">
+
+                        <img src="{% if profile.image %}{{ profile.image.url }}{% else %}/media/users/image/avatar.png{% endif %}" alt="">
+
+                    </div>
+                    <div class="profile-header-content mr-3 mt-2 float-right">
+                        <span class="d-block profile-username">{{ profile.user.first_name }} {{ profile.user.last_name }}</span>
+                        <span class="d-block profile-phone">{{ profile.phone }}</span>
+                    </div>
+                    <div class="profile-link mt-2 dt-sl">
+                        <hr>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <a href="{% url 'password_change' %}">
+                                    <i class="mdi mdi-lock-reset"></i>
+                                    <span class="d-block">تغییر رمز</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-center">
+                                <a href="{% url 'logout' %}">
+                                    <i class="mdi mdi-logout-variant"></i>
+                                    <span class="d-block">خروج از حساب</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dt-sl dt-sn mb-3">
+                <div class="profile-menu-section dt-sl">
+                    <div class="label-profile-menu mt-2 mb-2">
+                        <span>حساب کاربری شما</span>
+                    </div>
+                    {% with request.resolver_match.url_name as url_name %}
+                        <div class="profile-menu">
+                            <ul>
+                                <li>
+                                    <a href="{% url 'profile_page' %}" class="{% if url_name == 'profile_page' or url_name == 'profile_info_edit' %}active{% endif %}">
+                                        <i class="mdi mdi-account-circle-outline"></i>
+                                        پروفایل
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'OrdersList' %}"
+                                       class="{% if url_name == 'OrdersList' or url_name == 'OrderDetail' %}active{% endif %}">
+                                        <i class="mdi mdi-basket"></i>
+                                        همه سفارش‌ها
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profile_favourites' %}"
+                                    class="{% if url_name == 'profile_favourites' %}active{% endif %}">
+                                        <i class="mdi mdi-heart-outline"></i>
+                                        لیست علاقمندی‌ها
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'CommentsList' %}"
+                                       class=" {% if url_name == 'CommentsList' %}active{% endif %}">
+                                        <i class="mdi mdi-glasses"></i>
+                                        نقد و نظرات
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profile_addresses' %}"
+                                       class="{% if url_name == 'profile_addresses' %}active{% endif %}">
+                                        <i class="mdi mdi-sign-direction"></i>
+                                        آدرس‌ها
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'historyList' %}" class="{% if url_name == 'historyList' %}active{% endif %}">
+                                        <i class="mdi mdi-eye-outline"></i>
+                                        بازدیدهای اخیر
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'profile_info' %}"
+                                       class="{% if url_name == 'profile_info' %}active{% endif %}">
+                                        <i class="mdi mdi-account-edit-outline"></i>
+                                        اطلاعات شخصی
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endwith %}
+                </div>
+            </div>
+        </div>
+        <div class="resize-sensor"
+             style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+            <div class="resize-sensor-expand"
+                 style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 301px; height: 1150px;"></div>
+            </div>
+            <div class="resize-sensor-shrink"
+                 style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                <div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Sidebar -->

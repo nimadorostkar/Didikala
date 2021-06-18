@@ -1,0 +1,719 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+
+{% load filter_tags %}
+{% block title %}
+    {{ product.title }}
+{% endblock %}
+
+{% block description %}
+    {{ product.description }}
+{% endblock %}
+
+{% block keyword %}
+    {{ product.keyword }}
+{% endblock %}
+
+{% block header_ref %}
+    <!-- Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+            <!-- Start title - breadcrumb -->
+            <div class="title-breadcrumb-special dt-sl mb-3">
+                <div class="breadcrumb dt-sl">
+                    <nav>
+                        <a href="/">خانه</a>
+                        {% if product.category.parent.status == 'True' %}
+                            <a href="{% url 'product_category_list' product.category.parent.slug %}">{{ product.category.parent }}</a>
+                        {% endif %}
+                        {% if product.category.status == 'True' %}
+                            <a href="{% url 'product_category_list' product.category.slug %}">{{ product.category }}</a>
+                        {% endif %}
+                        <a href="#" class="active" aria-current="page">{{ product.title }}</a>
+                    </nav>
+                </div>
+            </div>
+            <!-- End title - breadcrumb -->
+
+            <!-- Start Product -->
+            <div class="dt-sn mb-5 dt-sl">
+                <div class="row">
+                    <!-- Product Gallery-->
+                    <div class="col-lg-4 col-md-6 pb-5 ps-relative">
+                        <!-- Product Options-->
+                        {% if user.is_authenticated %}
+                            <ul class="gallery-options">
+                                <li>
+                                    <button id="my_favourite"
+                                            class=" add-favorites {% if is_favourite %} favorites {% endif %}"><i
+                                            class="mdi mdi-heart"></i></button>
+                                    <span class="tooltip-option">{% if is_favourite %}خارج کردن از علاقمندی{% else %}
+                                        افزودن
+                                        به علاقمندی{% endif %}</span>
+                                </li>
+                            </ul>
+                        {% endif %}
+
+                        <div class="product-timeout position-relative pt-5 mb-3">
+                        </div>
+                        <div class="product-gallery">
+                            <div class="product-carousel owl-carousel">
+                                <div class="item">
+                                    {% if variant.image_id > 0 %}
+                                        <a class="gallery-item" href="{{ variant.image }}"
+                                           data-fancybox="gallery1" data-hash="one">
+                                            <img src="{{ variant.image }}" alt="Product">
+                                        </a>
+                                    {% else %}
+                                        <a class="gallery-item" href="{{ product.image.url }}"
+                                           data-fancybox="gallery1" data-hash="one">
+                                            <img src="{{ product.image.url }}" alt="Product">
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                {% for img in product_gallery %}
+                                    <div class="item">
+                                        <a class="gallery-item" href="{{ img.image.url }}"
+                                           data-fancybox="gallery1" data-hash="{{ img.id }}">
+                                            <img src="{{ img.image.url }}" alt="Product">
+                                        </a>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                            <ul class="product-thumbnails ">
+                                <li class="active">
+                                    <a href="#one">
+                                        <img src="{{ product.image.url }}" alt="Product"
+                                             style="height: 35px;width: 35px">
+                                    </a>
+                                </li>
+                                {% for img in product_gallery %}
+                                    <li>
+                                        <a href="#{{ img.id }}">
+                                            <img src="{{ img.image.url }}" alt="Product"
+                                                 style="height: 35px;width: 35px">
+                                        </a>
+                                    </li>
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).on('change', '#post-form', function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                type: 'POST',
+                                url: '{% url "ajaxcolor" %}',
+                                data: {
+                                    productid: $('#productid').val(),
+                                    size: $('input[name=size]:checked').val(),
+                                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                                    action: 'post'
+                                },
+                                data_type: 'html',
+                                success: function (data) {
+                                    console.log("success");
+                                    $('#appendHere').html(data.rendered_table);
+                                },
+                                error: function (data) {
+                                    alert("Got an error dude " + data);
+                                }
+                            });
+                        });
+
+
+                    </script>
+                    <!-- Product Info -->
+                    <div class="col-lg-8 col-md-6 pb-5">
+                        <div class="product-info dt-sl">
+                            <div class="product-title dt-sl">
+                                <h1 class="mb-3">{{ product.title }}
+                                </h1>
+                                {% if product.title_eng %}
+                                    <h3>{{ product.title_eng }}</h3>
+                                {% endif %}
+                            </div>
+                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>کد محصول:{{ product.id }}</h2>
+                                <br>
+                                <h2 class="jdj" id="dd">برند محصول:
+                                    <a class="a-brand-cta" href="{{ product.brand.get_absolute_url }}">
+                                        {{ product.brand }}
+                                    </a>
+                                </h2>
+                                {% if product.category.status == 'True' %}
+                                    <h2 class="jdj" id="dd">دسته‌بندی محصول:
+                                        <a href="{{ product.category.get_absolute_url }}">
+                                            {{ product.category }}
+                                        </a>
+                                    </h2>
+                                {% endif %}
+
+                            </div>
+                            {% if variants %}
+                                {% if product.variant == 'Size-Color' %}
+                                    <div class="product-variant dt-sl">
+                                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0">
+                                            <h2>انتخاب سایز:</h2>
+                                        </div>
+                                        <form method="POST" id="post-form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="productid" id="productid"
+                                                   value="{{ product.id }}">
+                                            <ul class="product-variants float-right ml-3">
+                                                {% for rs in sizes %}
+
+                                                    <li class="ui-variant">
+                                                        <label class="ui-variant ui-variant--color">
+                                                            <span class="ui-variant-shape"></span>
+                                                            <input type="radio" value="{{ rs.size_id }}"
+                                                                   class="variant-selector" name="size" id="size"
+                                                                    {% if variant.size_id == rs.size_id %}
+                                                                   checked {% endif %}>
+                                                            <span class="ui-variant--check">{{ rs.size.name }}</span>
+                                                        </label>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </form>
+                                    </div>
+                                    <div class="product-variant dt-sl">
+                                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0">
+                                            <h2>انتخاب رنگ:</h2>
+                                        </div>
+                                        <form method="post" action="?qv=selectvariant" id="post-color">
+                                            {% csrf_token %}
+                                            <div id="appendHere">
+                                                <input type="hidden" name="size" id="size" value="{{ size_id }}">
+                                                <ul class="product-variants float-right ml-3">
+                                                    {% for rs in colors %}
+                                                        <li class="ui-variant">
+                                                            <label class="ui-variant ui-variant--color">
+                                                        <span class="ui-variant-shape"
+                                                              style="background-color: {{ rs.color.code }}"></span>
+                                                                <input type="radio" class="variant-selector"
+                                                                        {% if variant.id == rs.id %}
+                                                                       checked  {% endif %}
+                                                                       name="variantid" id="variantid"
+                                                                       value="{{ rs.id }}"
+                                                                       onchange="this.form.submit()">
+                                                                <span class="ui-variant--check"> {{ rs.color.name }}</span>
+                                                            </label>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                        </form>
+                                    </div>
+
+                                {% elif product.variant == 'Size' %}
+                                    <div class="product-variant dt-sl">
+                                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0">
+                                            <h2>انتخاب سایز:</h2>
+                                        </div>
+                                        <form method="post" action="?qv=selectvariant" id="post-color">
+                                            {% csrf_token %}
+                                            <div id="appendHere">
+                                                <input type="hidden" name="size" id="size" value="{{ size_id }}">
+                                                <ul class="product-variants float-right ml-3">
+                                                    {% for rs in sizes %}
+                                                        <li class="ui-variant">
+                                                            <label class="ui-variant ui-variant--color">
+                                                                <span class="ui-variant-shape"></span>
+                                                                <input type="radio" class="variant-selector"
+                                                                        {% if variant.id == rs.id %} checked {% endif %}
+                                                                       name="variantid" id="variantid"
+                                                                       value="{{ rs.id }}"
+                                                                       onchange="this.form.submit() ; document.getElementById('propri').innerHTML = '{{ rs.price|intcomma:False }} تومان' "
+                                                                       ;
+                                                                >
+                                                                <span class="ui-variant--check"> {{ rs.size.name }}</span>
+                                                            </label>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                        </form>
+                                    </div>
+
+                                {% elif product.variant == 'Color' %}
+                                    <div class="product-variant dt-sl">
+                                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0">
+                                            <h2>انتخاب رنگ:</h2>
+                                        </div>
+                                        <form method="post" action="?qv=selectvariant" id="post-color">
+                                            {% csrf_token %}
+                                            <div id="appendHere">
+                                                <input type="hidden" name="size" id="size" value="{{ size_id }}">
+                                                <ul class="product-variants float-right ml-3">
+                                                    {% for rs in colors %}
+                                                        <li class="ui-variant">
+                                                            <label class="ui-variant ui-variant--color">
+                                                            <span class="ui-variant-shape"
+                                                                  style="background-color: {{ rs.color.code }}"></span>
+                                                                <input type="radio" class="variant-selector"
+                                                                        {% if variant.id == rs.id %} checked {% endif %}
+                                                                       name="variantid" id="variantid"
+                                                                       value="{{ rs.id }}"
+                                                                       data-price=" تومان"
+                                                                       onchange=" this.form.submit();"
+                                                                >
+                                                                <span class="ui-variant--check"> {{ rs.color.name }}</span>
+                                                            </label>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                        </form>
+                                    </div>
+
+
+                                {% endif %}
+                            {% endif %}
+                            {% if variants %}
+                                {% if  product.variant != 'None' %}
+                                    <form action="{% url 'addToShopCart' product.id variant.id %}" method="post"
+                                          id="addchart-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="variantid" id="variantid" value="{{ variant.id }}">
+                                        <div id="SelectedProduct">
+                                            <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                                    {% if variant.size %}
+                                                        <br>
+                                                        <h2> سایز محصول انتخابی : ( {{ variant.size }} ) </h2>
+                                                    {% endif %}
+
+                                                    {% if variant.color %}
+                                                        <br>
+                                                        <h2 class="font-weight-bold">رنگ محصول انتخابی :
+                                                            ( {{ variant.color }} ) </h2>
+                                                    {% endif %}
+                                                    <br>
+                                                </div>
+                                                <h2>قیمت : <span
+                                                        class="price">{{ variant.price|intcomma:False }} تومان</span>
+                                                </h2>
+                                            </div>
+                                            <div class="dt-sl mt-4">
+                                                {% if variant.quantity > 0 %}
+                                                    <button type="submit"
+                                                            class="btn-primary-cm custom-btn-order btn-with-icon">
+                                                        <img src="{% static '/images/theme/shopping-cart.png' %}"
+                                                             alt="">
+                                                        افزودن به سبد خرید
+                                                    </button>
+                                                {% else %}
+                                                    <button type="button"
+                                                            class="btn-primary-cm custom-btn-order bg-secondary btn-with-icon">
+                                                        <i class="mdi mdi-information"></i>
+                                                        موجود نیست
+                                                    </button>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </form>
+                                {% endif %}
+                            {% else %}
+                                <form action="{% url 'addToShopCart' id=product.id  variantid=0 %}" method="post"
+                                      id="addchart-form">
+                                    {% csrf_token %}
+                                    <div id="SelectedProduct">
+                                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                            <br>
+                                            <h2>قیمت : <span
+                                                    class="price">{{ product.price|intcomma:False }} تومان</span>
+                                            </h2>
+                                        </div>
+                                        <div class="dt-sl mt-4">
+                                            {% if product.amount > 0 %}
+                                                <button type="submit"
+                                                        class="btn-primary-cm custom-btn-order btn-with-icon">
+                                                    <img src="{% static '/images/theme/shopping-cart.png' %}"
+                                                         alt="">
+                                                    افزودن به سبد خرید
+                                                </button>
+                                            {% else %}
+                                                <button type="button"
+                                                        class="btn-primary-cm custom-btn-order bg-secondary btn-with-icon">
+                                                    <i class="mdi mdi-information"></i>
+                                                    موجود نیست
+                                                </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="dt-sn mb-5 px-0 dt-sl pt-0">
+                <!-- Start tabs -->
+                <section class="tabs-product-info mb-3 dt-sl">
+                    <div class="ah-tab-wrapper dt-sl">
+                        <div class="ah-tab dt-sl">
+                            {% if product.analyze %}
+                                <a class="ah-tab-item" data-ah-tab-active="true" href=""><i
+                                        class="mdi mdi-glasses"></i>نقد و بررسی</a>
+
+                            {% endif %}
+                            {% if product.details %}
+                                <a class="ah-tab-item"{% if  not product.analyze %}
+                                   data-ah-tab-active="true" {% endif %} href=""><i
+                                        class="mdi mdi-format-list-checks"></i>مشخصات</a>
+                            {% endif %}
+                            <a class="ah-tab-item" href=""><i
+                                    class="mdi mdi-comment-text-multiple-outline"></i>نظرات کاربران</a>
+                        </div>
+                    </div>
+                    <div class="ah-tab-content-wrapper product-info px-4 dt-sl">
+                        {% if product.analyze %}
+                            <div class="ah-tab-content dt-sl" data-ah-tab-active="true">
+                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                    <h2>نقد و بررسی</h2>
+                                </div>
+                                <div class="product-title dt-sl">
+                                    <h1>{{ product.title }}
+                                    </h1>
+                                    {% if product.title_en %}
+                                        <h3>{{ product.title_en }}</h3>
+                                    {% endif %}
+                                </div>
+                                <div class="description-product dt-sl mt-3 mb-3">
+                                    <div class="container">
+                                        <p>
+                                            {{ product.analyze|safe }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        {% endif %}
+                        {% if product.details %}
+                            <div class="ah-tab-content params dt-sl" {% if  not product.analyze %}
+                                 data-ah-tab-active="true" {% endif %}>
+                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                    <h2>مشخصات فنی</h2>
+                                </div>
+                                <div class="product-title dt-sl mb-3">
+                                    <h1>{{ product.title }}
+                                    </h1>
+                                    {% if product.title_en %}
+                                        <h3>{{ product.title_en }}</h3>
+                                    {% endif %}
+                                </div>
+                                <section>
+                                    <div class="description-product dt-sl mt-3 mb-3">
+                                        <div class="container">
+                                            <p>
+                                                {{ product.details|safe }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        {% endif %}
+                        <div class="ah-tab-content comments-tab dt-sl">
+                            <div class="section-title title-wide no-after-title-wide mb-0 dt-sl">
+                                <h2>امتیاز کاربران به:</h2>
+                            </div>
+                            <div class="product-title dt-sl mb-3">
+                                <h1>{{ product.title }}
+                                </h1>
+
+                            </div>
+                            <div class="dt-sl">
+                                <div class="row">
+                                    <div class="col-md-6 col-sm-12">
+                                        <ul class="content-expert-rating px-2">
+                                            {% for attr in product_attr %}
+                                                <li>
+                                                    <div class="cell">{{ attr.title }}</div>
+                                                    <div class="cell">
+                                                        <div class="rating rating--general"
+                                                             data-rate-digit="{% if attr.rate == 5 %}عالی{% elif attr.rate == 4 %}خوب{% elif attr.rate == 3 %}معمولی{% elif attr.rate == 2 %}بد{% elif attr.rate == 1 %}خیلی‌بد{% endif %}">
+                                                            <div class="rating-rate"
+                                                                 data-rate-value="100%"
+                                                                 style="width: {% if attr.rate == 5 %}100%{% elif attr.rate == 4 %}75%{% elif attr.rate == 3 %}50%{% elif attr.rate == 2 %}25%{% elif attr.rate == 1 %}0%{% endif %};"></div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6 col-sm-12">
+                                        <div class="comments-summary-note">
+                                                <span>شما هم می‌توانید در مورد این کالا نظر
+                                                    بدهید.</span>
+                                            <p>برای ثبت نظر، لازم است ابتدا وارد حساب کاربری خود
+                                                شوید. اگر این محصول را قبلا از دیجی‌کالا خریده
+                                                باشید، نظر
+                                                شما به عنوان مالک محصول ثبت خواهد شد.
+                                            </p>
+                                            <div class="dt-sl mt-2">
+                                                <a href="{% url 'comment_product' product.id %}"
+                                                   class="btn-primary-cm btn-with-icon">
+                                                    <i class="mdi mdi-comment-text-outline"></i>
+                                                    افزودن نظر جدید
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="comments-area dt-sl">
+                                    <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 dt-sl">
+                                        <h2>نظرات کاربران</h2>
+                                        <p class="count-comment">{{ product_comments.count }} نظر</p>
+                                    </div>
+                                    <ol class="comment-list">
+                                        <!-- #comment-## -->
+                                        {% for p_comment in product_comments %}
+                                            <li>
+                                                <div class="comment-body">
+                                                    <div class="row">
+
+                                                        <div class="col-md-3 col-sm-12">
+                                                            {% if p_comment.order_product %}
+                                                                <div class="message-light message-light--purchased">
+                                                                    خریدار این محصول
+                                                                </div>
+                                                                {% if p_comment.order_product.variant.color %}
+                                                                    <ul class="comments-user-shopping">
+                                                                        <li>
+                                                                            <div class="cell">رنگ خریداری
+                                                                                شده:
+                                                                            </div>
+                                                                            <div class="cell color-cell">
+                                                                        <span class="shopping-color-value"
+                                                                              style="background-color: {{ p_comment.order_product.variant.color.code }}; border: 1px solid rgba(0, 0, 0, 0.25)"></span>{{ p_comment.order_product.variant.color.name }}
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                {% endif %}
+
+                                                            {% endif %}
+                                                            <div class="message-light {% if p_comment.advice == 'no' %} message-light--opinion-negative {% elif p_comment.advice == 'yes' %}message-light--opinion-positive{% else %} message-light--opinion-omm {% endif %}">
+                                                                {{ p_comment.get_advice_display }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-9 col-sm-12 comment-content">
+                                                            <div class="comment-title">
+                                                                {{ p_comment.subject }}
+                                                            </div>
+                                                            <div class="comment-author">
+                                                                توسط {{ p_comment.user_id.username }} در
+                                                                تاریخ {{ p_comment.j_create_at }}
+                                                            </div>
+                                                            {% if p_comment.advantage or p_comment.disadvantage %}
+                                                                <div class="row">
+                                                                    {% if p_comment.advantage %}
+                                                                        <div class="col-md-4 col-sm-6 col-12">
+                                                                            <div class="content-expert-evaluation-positive">
+                                                                                <span>نقاط قوت</span>
+                                                                                <ul>
+                                                                                    {% with p_comment.advantage|split:"," as advs %}
+                                                                                        {% for ad in advs %}
+                                                                                            <li>{{ ad }}
+                                                                                            </li>
+                                                                                        {% endfor %}
+                                                                                    {% endwith %}
+                                                                                </ul>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                    {% if p_comment.disadvantage %}
+                                                                        <div class="col-md-4 col-sm-6 col-12">
+                                                                            <div class="content-expert-evaluation-negative">
+                                                                                <span>نقاط ضعف</span>
+                                                                                <ul>
+                                                                                    {% with p_comment.disadvantage|split:"," as advs %}
+                                                                                        {% for ad in advs %}
+                                                                                            <li>{{ ad }}
+                                                                                            </li>
+                                                                                        {% endfor %}
+                                                                                    {% endwith %}
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            {% endif %}
+                                                            <p>
+                                                                {{ p_comment.comment }}
+                                                            </p>
+                                                            <div class="footer">
+
+                                                                <div class="comments-likes">
+                                                                    آیا این نظر برایتان مفید بود؟
+                                                                    {% if user.is_authenticated %}
+                                                                        <button
+                                                                                data-comment='{{ p_comment.id }}'
+                                                                                class="btn-like affective-button"
+                                                                                data-counter="{{ p_comment.affective_count }}">
+                                                                            بله
+                                                                        </button>
+                                                                        <button
+                                                                                class="btn-like notaffective-button"
+                                                                                data-comment='{{ p_comment.id }}'
+                                                                                data-counter="{{ p_comment.notaffective_count }}">
+                                                                            خیر
+                                                                        </button>
+                                                                    {% else %}
+                                                                        <button onClick="location.href='{% url "login" %}'"
+                                                                                data-comment='{{ p_comment.id }}'
+                                                                                class="btn-like "
+                                                                                data-counter="{{ p_comment.affective_count }}">
+                                                                            بله
+                                                                        </button>
+                                                                        <button onClick="location.href='{% url "login" %}'"
+                                                                                class="btn-like "
+                                                                                data-comment='{{ p_comment.id }}'
+                                                                                data-counter="{{ p_comment.notaffective_count }}">
+                                                                            خیر
+                                                                        </button>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- End tabs -->
+            </div>
+            <!-- End Product -->
+
+            <!-- Start Product-Slider -->
+            {% if related_product %}
+                <section class="slider-section dt-sl mb-5">
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="section-title text-sm-title title-wide no-after-title-wide">
+                                <h2>محصولات پیشنهادی</h2>
+                                <a href="{% url 'product_category_list' slug=cat.slug %}">مشاهده همه</a>
+                            </div>
+                        </div>
+
+                        <!-- Start Product-Slider -->
+                        <div class="col-12">
+                            <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                                {% for product in related_product %}
+                                    <div class="item">
+                                        <div class="product-card mb-3">
+                                            <div class="product-head">
+
+                                            </div>
+                                            <a class="product-thumb"
+                                               href="{{ product.get_absolute_url }}">
+                                                <img src="{{ product.image.url }}" style="height: 154px; width: 154px;"
+                                                     alt="Product Thumbnail">
+                                            </a>
+                                            <div class="product-card-body">
+                                                <a class="product-meta"
+                                                   href="{{ product.get_absolute_url }}">{{ product.title|truncatechars:25 }}</a>
+                                                <span class="product-price">{{ product.price|intcomma:False }} تومان</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+                        <!-- End Product-Slider -->
+
+                    </div>
+                </section>
+            {% endif %}
+            <!-- End Product-Slider -->
+
+        </div>
+    </main>
+    <!-- End main-content -->
+{% endblock %}
+
+{% block footer_ref %}
+    <!-- Plugins -->
+    <script src="{% static 'js/vendor/jquery.fancybox.min.js' %}"></script>
+    <script src="{% static 'js/vendor/countdown.min.js' %}"></script>
+    <script>
+        $(document).on('click', '#my_favourite', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '{% url "product_favourite"  product.id %}',
+                success: function (json) {
+                    document.getElementById("my_favourite").classList.add(json['result']);
+                },
+                error: function (xhr, errmsg, err) {
+                }
+            });
+        })
+        $(document).on('click', '.affective-button', function (e) {
+            var $this = $(this);
+
+            e.preventDefault();
+            $.ajax({
+                type: 'GET',
+                url: '{% url "comment_affective" %}',
+                data: {
+                    commentid: $this.data('comment'),
+                    action: 'get'
+                },
+                success: function (json) {
+                    var af = json['result_af'];
+                    var notaf = json['result_notaf'];
+                    $this.attr('data-counter', af);
+                    $this.addClass("checked");
+                    $this.next().attr('data-counter', notaf);
+                    $this.next().removeClass("checked");
+
+                },
+                error: function (xhr, errmsg, err) {
+
+                }
+            });
+        })
+
+        $(document).on('click', '.notaffective-button', function (e) {
+            var $this = $(this);
+
+            e.preventDefault();
+            $.ajax({
+                type: 'GET',
+                url: '{% url "comment_notaffective" %}',
+                data: {
+                    commentid: $this.data('comment'),
+                    action: 'get'
+                },
+                success: function (json) {
+                    var af = json['result_af'];
+                    var notaf = json['result_notaf'];
+                    $this.attr('data-counter', notaf);
+                    $this.addClass("checked");
+                    $this.prev().attr('data-counter', af);
+                    $this.prev().removeClass("checked");
+                },
+                error: function (xhr, errmsg, err) {
+                }
+            });
+        })
+
+    </script>
+
+
+{% endblock %}

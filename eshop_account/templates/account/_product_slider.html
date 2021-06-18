@@ -1,0 +1,47 @@
+{% load static %}
+
+{% load humanize %}
+
+<!-- Start Product-Slider -->
+<section class="slider-section dt-sl mt-5 mb-5">
+    <div class="row mb-3">
+        <div class="col-12">
+            <div class="section-title text-sm-title title-wide no-after-title-wide">
+                <h2>محصولات پیشنهادی</h2>
+                {#                <a href="#">مشاهده همه</a>#}
+            </div>
+        </div>
+
+        <!-- Start Product-Slider -->
+        <div class="col-12">
+            <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                {% for pp in product_picked %}
+                    <div class="item">
+                        <div class="product-card mb-3">
+                            <div class="product-head">
+                                <div class="rating-stars">
+
+                                </div>
+                                <div class="discount">
+                                </div>
+                            </div>
+                            <a class="product-thumb"
+                               href="{{ pp.get_absolute_url }}">
+                                <img src="{{ pp.image.url }}" alt="{{ pp.title }}"
+                                     style="height: 154px; width: 154px;">
+                            </a>
+                            <div class="product-card-body">
+                                <a class="product-meta"
+                                   href="{{ pp.get_absolute_url }}">{{ pp.title|truncatechars:25 }}</a>
+                                <span class="product-price"> {{ pp.price|intcomma:False }} تومان </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- End Product-Slider -->
+
+    </div>
+</section>
+<!-- End Product-Slider -->

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fa">
+{% load static %}
+{% load humanize %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="theme-color" content="#f7858d">
+    <meta name="msapplication-navbutton-color" content="#f7858d">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#f7858d">
+    <title>Shopping-peyment Page</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap.min.css' %}">
+    <!-- Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/jquery.horizontalmenu.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="{% static 'css/vendor/materialdesignicons.min.css' %}">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'css/colors/default.css" id="colorswitch' %}">
+</head>
+
+
+<body>
+
+<div class="wrapper shopping-page">
+
+    <!-- Start header-shopping -->
+    <header class="header-shopping dt-sl">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center pt-2">
+                    <div class="header-shopping-logo dt-sl">
+                        <a href="/">
+                            <img src="{% static 'images/logo.png' %}" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 text-center">
+                    <ul class="checkout-steps">
+                        <li>
+                            <a href="#" class="active">
+                                <span>اطلاعات ارسال</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="#" class="active">
+                                <span>پرداخت</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span>اتمام خرید و ارسال</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End header-shopping -->
+
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+
+            <div class="row">
+                <div class="cart-page-content col-xl-9 col-lg-8 col-12 px-0">
+                    <section class="page-content dt-sl">
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                            <h2>شیوه پرداخت</h2>
+                        </div>
+                        <form method="post" id="shipping-data-form" class="dt-sn pt-3 pb-3 mb-4">
+                            {% csrf_token %}
+                            <div class="checkout-pack">
+                                <div class="row">
+                                    <div class="checkout-time-table checkout-time-table-time">
+                                        <div class="col-12">
+                                            <div class="radio-box custom-control custom-radio pl-0 pr-3">
+                                                <input type="radio" class="custom-control-input" name="post-pishtaz"
+                                                       id="1" value="1" checked>
+                                                <label for="1" class="custom-control-label">
+                                                    <i class="mdi mdi-credit-card-outline checkout-additional-options-checkbox-image"></i>
+                                                    <div class="content-box">
+                                                        <div
+                                                                class="checkout-time-table-title-bar checkout-time-table-title-bar-city">
+                                                            پرداخت اینترنتی هوشمند دیجی‌کالا
+                                                            <span class="help-sn" data-toggle="tooltip" data-html="true"
+                                                                  data-placement="bottom"
+                                                                  title="<div class='help-container is-left'><div class='help-arrow'></div><p class='help-text'>با پرداخت اینترنتی، سفارش شما با اولویت بیشتری نسبت به پرداخت در محل پردازش و ارسال می شود. در صورت پرداخت ناموفق هزینه کسر شده حداکثر طی ۷۲ ساعت به حساب شما بازگردانده می‌شود.</p></div>">
+                                                                    <span class="mdi mdi-information-outline"></span>
+                                                                </span>
+                                                        </div>
+                                                        <ul class="checkout-time-table-subtitle-bar">
+                                                            <li>
+                                                                آنلاین با تمامی کارت‌های بانکی
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="section-title text-sm-title title-wide no-after-title-wide mb-0 px-res-1">
+                            <h2>خلاصه سفارش</h2>
+                        </div>
+                        <div class="dt-sn pt-3 pb-5">
+                            <div class="checkout-order-summary">
+                                <div class="accordion checkout-order-summary-item" id="accordionExample">
+                                    <div class="card pt-sl-res">
+                                        <div class="card-header checkout-order-summary-header" id="headingOne">
+                                            <h2 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse"
+                                                        data-target="#collapseOne" aria-expanded="false"
+                                                        aria-controls="collapseOne">
+                                                    <div class="checkout-order-summary-row">
+                                                        <div
+                                                                class="checkout-order-summary-col checkout-order-summary-col-post-time">
+                                                            تعداد مرسوله
+                                                            <span class="fs-sm">({{ totalCount }} کالا)</span>
+                                                        </div>
+                                                        <div
+                                                                class="checkout-order-summary-col checkout-order-summary-col-how-to-send">
+                                                            <span class="dl-none-sm">نحوه ارسال</span>
+                                                            <span class="dl-none-sm">
+                                                                    {{ selected_post_way.way }}
+                                                                </span>
+                                                        </div>
+                                                        <div
+                                                                class="checkout-order-summary-col checkout-order-summary-col-how-to-send">
+                                                            <span>ارسال از</span>
+                                                            <span class="fs-sm">
+                                                                    2 روز کاری
+                                                                </span>
+                                                        </div>
+                                                        <div
+                                                                class="checkout-order-summary-col checkout-order-summary-col-shipping-cost">
+                                                            <span>هزینه ارسال</span>
+                                                            <span class="fs-sm">
+                                                                    {{ selected_post_way.price|intcomma:False }}
+                                                                </span>
+                                                        </div>
+                                                    </div>
+                                                    <i class="mdi mdi-chevron-down icon-down"></i>
+                                                </button>
+                                            </h2>
+                                        </div>
+
+                                        <div id="collapseOne" class="collapse" aria-labelledby="headingOne"
+                                             data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <div class="box">
+                                                    <div class="row">
+                                                        {% for rs in shopcart %}
+                                                            {% if rs.product.variant == 'None' %}
+                                                                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                                                    <div class="product-box-container">
+                                                                        <div class="product-box product-box-compact">
+                                                                            <a class="product-box-img">
+                                                                                <img src="{{ rs.product.image.url }}"
+                                                                                     style="height: 80px;width: 80px">
+                                                                            </a>
+                                                                            <div class="product-box-title">
+                                                                                {{ rs.product.title }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% else %}
+                                                                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                                                    <div class="product-box-container">
+                                                                        <div class="product-box product-box-compact">
+                                                                            <a class="product-box-img">
+                                                                                {% if rs.variant.image_id  > 0 %}
+                                                                                    <img src="{{ rs.variant.image }}"
+                                                                                         style="height: 80px;width: 80px"
+                                                                                         alt="Product Thumbnail">
+                                                                                {% else %}
+                                                                                    <img src="{{ rs.product.image.url }}"
+                                                                                         style="height: 80px;width: 80px"
+                                                                                         alt="Product Thumbnail">
+                                                                                {% endif %}
+
+                                                                            </a>
+                                                                            <div class="product-box-title">
+                                                                                {{ rs.variant.title }}
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <a href="{% url 'shipping_page' %}" class="float-right border-bottom-dt"><i
+                                    class="mdi mdi-chevron-double-right"></i>بازگشت به شیوه ارسال</a>
+
+                        </div>
+                    </section>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-12 w-res-sidebar sticky-sidebar">
+                    <div class="dt-sn mb-2">
+                        <ul class="checkout-summary-summary">
+                            <li>
+                                <span>مبلغ کل ({{ totalCount }} کالا)</span><span>{{ totalPrice|intcomma:False }} تومان</span>
+                            </li>
+                            <li>
+                                    <span>هزینه ارسال<span class="help-sn" data-toggle="tooltip" data-html="true"
+                                                           data-placement="bottom"
+                                                           title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>هزینه ارسال مرسولات می‌تواند وابسته به شهر و آدرس گیرنده متفاوت باشد. در صورتی که هر یک از مرسولات حداقل ارزشی برابر با ۱۵۰هزار تومان داشته باشد، آن مرسوله بصورت رایگان ارسال می‌شود.<br>'حداقل ارزش هر مرسوله برای ارسال رایگان، می تواند متغیر باشد.'</p></div>">
+                                            <span class="mdi mdi-information-outline"></span>
+                                        </span></span><span>{% if selected_post_way.price == 0 %} رایگان
+                                {% else %}{{ selected_post_way.price|intcomma:False }} تومان {% endif %}</span>
+                            </li>
+
+                        </ul>
+                        <div class="checkout-summary-devider">
+                            <div></div>
+                        </div>
+                        <div class="checkout-summary-content">
+                            <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                            <div class="checkout-summary-price-value">
+                                <span class="checkout-summary-price-value-amount">{{ totalPriceWithPost|intcomma:False }}</span>
+                                تومان
+                            </div>
+                            <form action="{% url 'order_completed' %}" method="post">
+                                {% csrf_token %}
+                                <a href="" class="mb-2 d-block">
+                                    <button type="submit"
+                                            class="btn-primary-cm btn-with-icon w-100 text-center pr-0 pl-0">
+                                        <i class="mdi mdi-arrow-left"></i>
+                                        پرداخت و ثبت نهایی سفارش
+                                    </button>
+                                </a>
+                            </form>
+                            <div>
+                                    <span>
+                                        کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش
+                                        مراحل بعدی را تکمیل کنید.
+                                    </span><span class="help-sn" data-toggle="tooltip" data-html="true"
+                                                 data-placement="bottom"
+                                                 title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش برای شما رزرو می‌شوند. در صورت عدم ثبت سفارش، دیجی‌کالا هیچگونه مسئولیتی در قبال تغییر قیمت یا موجودی این کالاها ندارد.</p></div>">
+                                        <span class="mdi mdi-information-outline"></span>
+                                    </span></div>
+                        </div>
+                    </div>
+                    <div class="dt-sn checkout-feature-aside pt-4">
+                        <ul>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/return-policy.svg' %}" alt="">
+                                هفت روز ضمانت تعویض
+                            </li>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/payment-terms.svg' %}" alt="">
+                                پرداخت در محل با کارت بانکی
+                            </li>
+                            <li class="checkout-feature-aside-item">
+                                <img src="{% static 'images/svg/delivery.svg' %}" alt="">
+                                تحویل اکسپرس
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- End main-content -->
+
+    <!-- Start mini-footer -->
+    <footer class="mini-footer dt-sl">
+        <div class="container main-container">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 text-left">
+                    <i class="mdi mdi-phone-outline"></i>
+                    شماره تماس : <a href="#">
+                    ۶۱۹۳۰۰۰۰
+                    - ۰۲۱
+                </a>
+                </div>
+                <div class="col-md-6 col-sm-12 text-right">
+                    <i class="mdi mdi-email-outline"></i>
+                    آدرس ایمیل : <a href="#">info@gmail.com</a>
+                </div>
+                <div class="col-12 text-center mt-2">
+                    <p class="text-secondary text-footer">
+                        استفاده از کارت هدیه یا کد تخفیف، درصفحه ی پرداخت امکان پذیر است.
+                    </p>
+                </div>
+                <div class="col-12 text-center">
+                    <div class="copy-right-mini-footer">
+                        Copyright © 2019 Didikala
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- End mini-footer -->
+
+</div>
+<!-- Core JS Files -->
+<script src="{% static 'js/vendor/jquery-3.4.1.min.js' %}"></script>
+<script src="{% static 'js/vendor/popper.min.js' %}"></script>
+<script src="{% static 'js/vendor/bootstrap.min.js' %}"></script>
+<!-- Plugins -->
+<script src="{% static 'js/vendor/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.horizontalmenu.js' %}"></script>
+<script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+<script src="{% static 'js/vendor/wNumb.js' %}"></script>
+<script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+<script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+<!-- Main JS File -->
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

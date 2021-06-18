@@ -1,0 +1,348 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+
+            <!-- Start Main-Slider -->
+            <div class="row mb-5">
+
+                <div class="col-xl-12 col-lg-12 col-12 order-1 order-lg-2">
+                    <!-- Start main-slider -->
+                    <section id="main-slider" class="main-slider carousel slide carousel-fade card hidden-sm"
+                             data-ride="carousel">
+
+                        <ol class="carousel-indicators">
+                            {% for slide in sliders %}
+                                <li data-target="#main-slider" data-slide-to="{{ forloop.counter0 }}"
+                                    class="{{ forloop.first|yesno:'active,' }}"></li>
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner">
+                            {% for slide in sliders %}
+                                <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                                    <a class="main-slider-slide" href="{{ slide.link }}"
+                                       style="background-image: url({{ slide.image.url }}) ;height: 329px ">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <a class="carousel-control-prev" href="#main-slider" role="button" data-slide="prev">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                        <a class="carousel-control-next" href="#main-slider" data-slide="next">
+                            <i class="mdi mdi-chevron-left"></i>
+                        </a>
+                    </section>
+                    <section id="main-slider-res"
+                             class="main-slider carousel slide carousel-fade card d-none show-sm" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            {% for slide in sliders %}
+                                <li data-target="#main-slider-res" data-slide-to="{{ forloop.counter0 }}"
+                                    class="{{ forloop.first|yesno:'active,' }}"></li>
+                            {% endfor %}
+                        </ol>
+                        <div class="carousel-inner">
+                            {% for slide in sliders %}
+                                <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                                    <a class="main-slider-slide" href="{{ slide.link }}">
+                                        <img src="{{ slide.image.url }}" alt=""
+                                             class="img-fluid">
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <a class="carousel-control-prev" href="#main-slider-res" role="button" data-slide="prev">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </a>
+                        <a class="carousel-control-next" href="#main-slider-res" data-slide="next">
+                            <i class="mdi mdi-chevron-left"></i>
+                        </a>
+                    </section>
+                    <!-- End main-slider -->
+                </div>
+            </div>
+            <!-- End Main-Slider -->
+
+            <!-- Start Product-Slider -->
+            <div class="row">
+                <div class="col-xl-10 col-lg-12">
+                    <section class="slider-section dt-sl mb-5">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="section-title text-sm-title title-wide no-after-title-wide">
+                                    <h2>پر فروش‌ترین ‌های کالای دیجیتال</h2>
+                                    <a href="/category/digital-product?s=&order_by=all_sale">مشاهده همه</a>
+                                </div>
+                            </div>
+
+                            <!-- Start Product-Slider -->
+                            <div class="col-12 px-res-0">
+                                <div class="product-carousel carousel-md owl-carousel owl-theme">
+                                    {% for pl in product_all_sale %}
+                                        <div class="item">
+                                            <div class="product-card">
+                                                <div class="product-head">
+                                                </div>
+                                                <a class="product-thumb"
+                                                   href="/product_detail/{{ pl.id }}/{{ pl.slug }}">
+                                                    <img src="{{ pl.image.url }}"
+                                                         alt="{{ pl.title }}" style="height: 154px; width: 154px;">
+                                                </a>
+                                                {% if pl.variant|first %}
+                                                <div class="product-card-body">
+                                                    <a class="product-meta"
+                                                       href="/product_detail/{{ pl.id }}/{{ pl.slug }}">{{ pl.title|truncatechars:20 }}</a>
+                                                    <span class="product-price">{{ pl.variant.price|first }} تومان</span>
+                                                </div>
+                                                    {% else %}
+                                                    <div class="product-card-body">
+                                                    <a class="product-meta"
+                                                       href="/product_detail/{{ pl.id }}/{{ pl.slug }}">{{ pl.title|truncatechars:20 }}</a>
+                                                    <span class="product-price">{{ pl.price|intcomma:False }}sa تومان</span>
+                                                </div>
+
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <!-- End Product-Slider -->
+
+                        </div>
+                    </section>
+                </div>
+                <div class="col-xl-2 col-lg-3 hidden-lg pr-0">
+                    <div class="widget-suggestion dt-sn pt-3 mt-3">
+                        <div class="widget-suggestion-title">
+                            <img src="{% static 'images/theme/suggestion-title.png' %}" alt="">
+                        </div>
+                        <div id="progressBar">
+                            <div class="slide-progress"></div>
+                        </div>
+                        <div id="suggestion-slider" class="owl-carousel owl-theme">
+                            {% for pp in product_picked %}
+                                <div class="item">
+                                    <div class="product-card mb-3 shadow-unset">
+                                        <div class="product-head">
+
+                                        </div>
+                                        <a class="product-thumb" href="/product_detail/{{ pp.id }}/{{ pp.slug }}">
+                                            <img src="{{ pp.image.url }}" alt="{{ pp.title }}"
+                                                 style="height: 142px; width: 142px;">
+                                        </a>
+                                        <div class="product-card-body">
+                                            <a class="product-meta"
+                                               href="/product_detail/{{ pp.id }}/{{ pp.slug }}">{{ pp.title|truncatechars:25 }}</a>
+                                            <span class="product-price">{{ pp.price|intcomma:False }} تومان</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Product-Slider -->
+
+
+            <!-- Start Category-Section -->
+            <div class="row mt-3 mb-5">
+                <div class="col-12">
+                    <div class="category-section dt-sn dt-sl">
+                        <div class="category-section-title dt-sl">
+                            <h3>بیش از ۱،۵۰۰،۰۰۰ کالا در دسته‌بندی‌های مختلف</h3>
+                        </div>
+                        <div class="category-section-slider dt-sl">
+                            <div class="category-slider owl-carousel">
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/notebook-computer.png' %}" alt="">
+                                        <h4 class="promotion-category-name">کالای دیجیتال</h4>
+                                        <h6 class="promotion-category-quantity">۱۵۶۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/lifeline-in-a-heart-outline.png' %}"
+                                             alt="">
+                                        <h4 class="promotion-category-name">آرایشی، بهداشتی و سلامت</h4>
+                                        <h6 class="promotion-category-quantity">۴۸۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/repair-tools.png' %}" alt="">
+                                        <h4 class="promotion-category-name">خودرو،ابزار و اداری</h4>
+                                        <h6 class="promotion-category-quantity">۵۶۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/hanbok.png' %}" alt="">
+                                        <h4 class="promotion-category-name">مد و پوشاک</h4>
+                                        <h6 class="promotion-category-quantity">۲۱۷۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/sofa.png' %}" alt="">
+                                        <h4 class="promotion-category-name">خانه و آشپزخانه</h4>
+                                        <h6 class="promotion-category-quantity">۲۲۹۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/school-material.png' %}" alt="">
+                                        <h4 class="promotion-category-name">لوازم تحریر و هنر</h4>
+                                        <h6 class="promotion-category-quantity">۸۶۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/baby-girl.png' %}" alt="">
+                                        <h4 class="promotion-category-name">کودک و نوزاد</h4>
+                                        <h6 class="promotion-category-quantity">۳۲۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/adventurer.png' %}" alt="">
+                                        <h4 class="promotion-category-name">ورزش و سفر</h4>
+                                        <h6 class="promotion-category-quantity">۱۵۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                                <div class="item">
+                                    <a href="#" class="promotion-category">
+                                        <img src="{% static 'images/category/restaurant-cutlery-circular-symbol-of-a-spoon-and-a-fork-in-a-circle.png' %}"
+                                             alt="">
+                                        <h4 class="promotion-category-name">خوردنی و آشامیدنی</h4>
+                                        <h6 class="promotion-category-quantity">۲۲۰۰۰ کالا</h6>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End Category-Section -->
+
+            <!-- Start Product-Slider -->
+            <section class="slider-section dt-sl mb-5">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="section-title text-sm-title title-wide no-after-title-wide">
+                            <h2>آخرین محصولات</h2>
+                            <a href="/category/New">مشاهده همه</a>
+                        </div>
+                    </div>
+
+                    <!-- Start Product-Slider -->
+                    <div class="col-12">
+                        <div class="product-carousel carousel-lg owl-carousel owl-theme">
+                            {% for pl in product_latest %}
+                                <div class="item">
+                                    <div class="product-card mb-3">
+                                        <div class="product-head">
+
+                                        </div>
+                                        <a class="product-thumb" href="/product_detail/{{ pl.id }}/{{ pl.slug }}">
+                                            <img src="{{ pl.image.url }}" alt="{{ pl.title }}"
+                                                 style="height: 154px; width: 154px;">
+                                        </a>
+                                        <div class="product-card-body">
+                                            <a class="product-meta"
+                                               href="/product_detail/{{ pl.id }}/{{ pl.slug }}">{{ pl.title|truncatechars:25 }}</a>
+                                            <span class="product-price"> {{ pl.price|intcomma:False }} تومان </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- End Product-Slider -->
+
+                </div>
+            </section>
+            <!-- End Product-Slider -->
+
+            <!-- Start Feature-Product -->
+            <section class="dt-sl dt-sn mb-5">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="section-title text-sm-title title-wide no-after-title-wide">
+                            <h2>پیشنهاد ما</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    {% for product in grouped_product %}
+                        <div class="col-lg-4 col-md-6 col-sm-12 col-12 pt-4">
+                            <div class="row">
+                                {% for p in product %}
+                                    <div class="col-12">
+                                        <div class="card-horizontal-product">
+                                            <div class="card-horizontal-product-thumb">
+                                                <a href="/product_detail/{{ p.id }}/{{ p.slug }}">
+                                                    <img src="{{ p.image.url }}" alt="{{ p.image.url }}"
+                                                         style="width: 107px; height: 107px;">
+                                                </a>
+                                            </div>
+                                            <div class="card-horizontal-product-content">
+                                                <div class="card-horizontal-product-title">
+                                                    <a href="/product_detail/{{ p.id }}/{{ p.slug }}">
+                                                        <h3>{{ p.title|truncatechars:30 }}</h3>
+                                                    </a>
+                                                </div>
+
+                                                <div class="card-horizontal-product-price">
+                                                    <span>{{ p.price|intcomma:False }} تومان</span>
+                                                </div>
+                                                <div class="card-horizontal-product-buttons">
+                                                    <a href="/product_detail/{{ p.id }}/{{ p.slug }}"
+                                                       class="btn btn-outline-info">جزئیات محصول</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+            <!-- End Feature-Product -->
+
+            <!-- Start Brand-Slider -->
+            <section class="slider-section dt-sl mb-5">
+                <div class="row">
+                    <!-- Start Product-Slider -->
+                    <div class="col-12">
+                        <div class="brand-slider carousel-lg owl-carousel owl-theme">
+                            {% for brand in all_barand %}
+                                {% if brand.image %}
+                                    <div class="item">
+                                        <a href="{{ brand.get_absolute_url }}"><img src="/media/{{ brand.image }}"
+                                                                                    class="img-fluid"
+                                                                                    alt="{{ brand.title }}"
+                                                                                    style="height: 131px; width: 131px"></a>
+
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- End Product-Slider -->
+
+                </div>
+            </section>
+            <!-- End Brand-Slider -->
+
+        </div>
+    </main>
+    <!-- End main-content -->
+{% endblock %}

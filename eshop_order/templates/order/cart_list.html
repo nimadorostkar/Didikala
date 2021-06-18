@@ -1,0 +1,282 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+
+
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    سبد خرید
+{% endblock %}
+
+{% block description %}
+    سبد خرید شما
+{% endblock %}
+
+{% block keyword %}
+    سبد خرید مشتری
+{% endblock %}
+
+{% block content %}
+    <main class="main-content dt-sl mt-4 mb-3" style="transform: none;">
+        {% if shopcart %}
+            <div class="container main-container" style="transform: none;">
+                <div class="row" style="transform: none;">
+                    <div class="col-xl-9 col-lg-8 col-md-12 col-sm-12 mb-2 px-0">
+                        <nav class="tab-cart-page">
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home"
+                                   role="tab" aria-controls="nav-home" aria-selected="true">سبد خرید<span
+                                        class="count-cart">{{ shopcart.count }}</span></a>
+                            </div>
+                        </nav>
+                    </div>
+                    <div class="col-12" style="transform: none;">
+                        <div class="tab-content" id="nav-tabContent" style="transform: none;">
+                            <div class="tab-pane fade active show" id="nav-home" role="tabpanel"
+                                 aria-labelledby="nav-home-tab" style="transform: none;">
+                                <div class="row" style="transform: none;">
+                                    <div class="col-xl-9 col-lg-8 col-12 px-0">
+                                        <div class="table-responsive checkout-content dt-sl">
+                                            <div class="checkout-header checkout-header--express">
+                                                <span class="checkout-header-title">ارسال </span>
+                                                <span class="checkout-header-extra-info">({{ totalCount }} کالا)</span>
+                                            </div>
+                                            <table class="table table-cart">
+                                                <tbody>
+                                                {% for rs in shopcart %}
+                                                    <tr class="checkout-item">
+                                                        <!-- Product image-->
+                                                        <td>
+                                                            {% if rs.variant.image_id  > 0 %}
+                                                                <img src="{{ rs.variant.image }}" alt=""
+                                                                     style="width: 150px; height: 150px">
+                                                            {% else %}
+
+                                                                <img src="{{ rs.product.image.url }}" alt=""
+                                                                     style="width: 150px; height: 150px">
+                                                            {% endif %}
+                                                            <a href="{% url 'removeshopcart'  rs.id %}">
+                                                                <button class="checkout-btn-remove" type="submit">×
+                                                                </button>
+                                                            </a>
+                                                        </td>
+
+                                                        <!-- Product name-->
+                                                        <td class="text-right">
+                                                            {% if rs.product.variant == 'None' or rs.variant == None %}
+                                                                <a href="{{ rs.product.get_absolute_url }}">
+                                                                    <h3 class="checkout-title">
+                                                                        {{ rs.product.title }}
+
+                                                                    </h3>
+                                                                </a>
+
+                                                            {% else %}
+                                                                <a href="{{ rs.product.get_absolute_url }}">
+                                                                    <h3 class="checkout-title">
+                                                                        {{ rs.variant.title }}
+                                                                    </h3>
+                                                                </a>
+
+                                                                <div class="checkout-variant checkout-variant--color">
+                                                                    {% if rs.product.variant == 'Color' %}
+                                                                        <span class="checkout-variant-title">رنگ :</span>
+                                                                        <span class="checkout-variant-value">
+                                                                            {{ rs.variant.color.name }}
+                                                                            <div class="checkout-variant-shape"
+                                                                                 style="background-color:{{ rs.variant.color.code }}"></div>
+                                                                        </span>
+                                                                    {% elif rs.product.variant == 'Size' %}
+                                                                        <span class="checkout-variant-title">سایز :</span>
+                                                                        <span class="checkout-variant-value">
+                                                                            {{ rs.variant.size.name }}
+                                                                        </span>
+
+                                                                    {% elif rs.product.variant == 'Size-Color' %}
+                                                                        <span class="checkout-variant-title">سایز :</span>
+                                                                        <span class="checkout-variant-value">
+                                                                            {{ rs.variant.size.name }}
+                                                                        </span>
+                                                                        <span class="checkout-variant-title">رنگ :</span>
+                                                                        <span class="checkout-variant-value">
+                                                                            {{ rs.variant.color.name }}
+                                                                            <div class="checkout-variant-shape"
+                                                                                 style="background-color:{{ rs.variant.color.code }}"></div>
+                                                                        </span>
+                                                                    {% endif %}
+
+                                                                </div>
+                                                            {% endif %}
+                                                        </td>
+
+                                                        <!-- Product number-->
+                                                        <td>
+                                                            {% if  rs.product.variant != 'None' and rs.variant != None %}
+                                                                <p class="mb-0">تعداد</p>
+                                                                <form action="{% url 'addToShopCart' rs.product.id rs.variant.id %}"
+                                                                      method="post"
+                                                                      id="addchart-form">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="variantid" id="variantid"
+                                                                           value="{{ rs.variant.id }}">
+                                                                    <div class="number-input">
+                                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
+                                                                        <input class="quantity " min="1"
+                                                                               max="{{ rs.variant.quantity }}"
+                                                                               name="quantity"
+                                                                               value="{{ rs.quantity }}"
+                                                                               type="number">
+                                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                                                class="plus"></button>
+                                                                    </div>
+                                                                </form>
+
+                                                            {% else %}
+                                                                <p class="mb-0">تعداد</p>
+                                                                <form method="post"
+                                                                      action="{% url 'addToShopCart' id=rs.product.id  variantid=0 %}">
+                                                                    {% csrf_token %}
+                                                                    <div class="number-input">
+                                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></button>
+                                                                        <input class="quantity " min="1"
+                                                                               max="{{ rs.product.amount }}"
+                                                                               name="quantity"
+                                                                               value="{{ rs.quantity }}"
+                                                                               type="number">
+                                                                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
+                                                                                class="plus"></button>
+                                                                    </div>
+                                                                </form>
+                                                            {% endif %}
+                                                        </td>
+
+                                                        <!-- Product all price-->
+                                                        <td>
+                                                            {% if  product.variant != 'None' %}
+                                                                <strong>{{ rs.amount|intcomma:False }} تومان</strong>
+                                                            {% else %}
+                                                                <strong>{{ rs.amount|intcomma:False }} تومان</strong>
+                                                            {% endif %}
+                                                        </td>
+
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-3 col-lg-4 col-12 w-res-sidebar sticky-sidebar"
+                                         style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+
+                                        <div class="theiaStickySidebar"
+                                             style="padding-top: 0px; padding-bottom: 1px; position: static; transform: none;">
+                                            <div class="dt-sn mb-2">
+                                                <ul class="checkout-summary-summary">
+                                                    <li>
+                                                        <span>مبلغ کل ({{ totalCount }} کالا)</span><span>{{ totalPrice|intcomma:False }} تومان</span>
+                                                    </li>
+                                                    <li>
+                                                    <span>هزینه ارسال<span class="help-sn" data-toggle="tooltip"
+                                                                           data-html="true" data-placement="bottom"
+                                                                           title=""
+                                                                           data-original-title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>هزینه ارسال مرسولات می‌تواند وابسته به شهر و آدرس گیرنده متفاوت باشد. در صورتی که هر یک از مرسولات حداقل ارزشی برابر با ۱۵۰هزار تومان داشته باشد، آن مرسوله بصورت رایگان ارسال می‌شود.<br>'حداقل ارزش هر مرسوله برای ارسال رایگان، می تواند متغیر باشد.'</p></div>">
+                                                            <span class="mdi mdi-information-outline"></span>
+                                                        </span></span><span>وابسته به آدرس</span>
+                                                    </li>
+                                                </ul>
+                                                <div class="checkout-summary-devider">
+                                                    <div></div>
+                                                </div>
+                                                <div class="checkout-summary-content">
+                                                    <div class="checkout-summary-price-title">مبلغ قابل پرداخت:</div>
+                                                    <div class="checkout-summary-price-value">
+                                                        <span class="checkout-summary-price-value-amount">{{ totalPrice|intcomma:False }}</span>
+                                                        تومان
+                                                    </div>
+                                                    <a href="/shipping" class="mb-2 d-block">
+                                                        <button class="btn-primary-cm btn-with-icon w-100 text-center pr-0">
+                                                            <i class="mdi mdi-arrow-left"></i>
+                                                            ادامه ثبت سفارش
+                                                        </button>
+                                                    </a>
+                                                    <div>
+                                                    <span>
+                                                        کالاهای موجود در سبد شما ثبت و رزرو نشده‌اند، برای ثبت سفارش
+                                                        مراحل بعدی را تکمیل کنید.
+                                                    </span><span class="help-sn" data-toggle="tooltip" data-html="true"
+                                                                 data-placement="bottom" title=""
+                                                                 data-original-title="<div class='help-container is-right'><div class='help-arrow'></div><p class='help-text'>محصولات موجود در سبد خرید شما تنها در صورت ثبت و پرداخت سفارش برای شما رزرو می‌شوند. در صورت عدم ثبت سفارش، دیجی‌کالا هیچگونه مسئولیتی در قبال تغییر قیمت یا موجودی این کالاها ندارد.</p></div>">
+                                                        <span class="mdi mdi-information-outline"></span>
+                                                    </span></div>
+                                                </div>
+                                            </div>
+                                            <div class="dt-sn checkout-feature-aside pt-4">
+                                                <ul>
+                                                    <li class="checkout-feature-aside-item">
+                                                        <img src="{% static 'images/svg/return-policy.svg' %}" alt="">
+                                                        هفت روز ضمانت تعویض
+                                                    </li>
+                                                    <li class="checkout-feature-aside-item">
+                                                        <img src="{% static 'images/svg/payment-terms.svg' %}" alt="">
+                                                        پرداخت در محل با کارت بانکی
+                                                    </li>
+                                                    <li class="checkout-feature-aside-item">
+                                                        <img src="{% static 'images/svg/delivery.svg' %}" alt="">
+                                                        تحویل اکسپرس
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="resize-sensor"
+                                                 style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                <div class="resize-sensor-expand"
+                                                     style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                    <div style="position: absolute; left: 0px; top: 0px; transition: all 0s ease 0s; width: 370px; height: 583px;"></div>
+                                                </div>
+                                                <div class="resize-sensor-shrink"
+                                                     style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; overflow: hidden; z-index: -1; visibility: hidden;">
+                                                    <div style="position: absolute; left: 0; top: 0; transition: 0s; width: 200%; height: 200%"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-11 mr-5 ml-5">
+                    <div class="dt sl dt-sn pt-3 pb-5">
+                        <div class="cart-page cart-empty">
+                            <div class="circle-box-icon">
+                                <i class="mdi mdi-cart-remove"></i>
+                            </div>
+                            <p class="cart-empty-title">سبد خرید شما خالیست!</p>
+                            <p>می‌توانید برای مشاهده محصولات بیشتر به صفحات زیر بروید:</p>
+                            <div class="cart-empty-links mb-5">
+
+                                <a href="/" class="border-bottom-dt">صفحه اصلی دیدی‌کالا</a>
+                                <a href="{% url 'profile_favourites' %}" class="border-bottom-dt">لیست مورد علاقه من</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+{% endblock %}
+
+{% block footer_ref %}
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+
+{% endblock %}

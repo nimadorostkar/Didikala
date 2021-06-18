@@ -1,0 +1,303 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/bootstrap-slider.min.css' %}">
+    {#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>#}
+{% endblock %}
+
+{% block title %}
+    ثبت دیدگاه برای محصول
+{% endblock %}
+
+
+
+{% block content %}
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+
+            <!-- Start Product -->
+            <div class="dt-sn mb-5 dt-sl">
+                <div class="row">
+                    <!-- Product Thumbnail-->
+                    <div class="col-lg-4 col-md-6 pb-5">
+                        <div class="product-thumbnail text-center">
+                            <a href="{{ product.get_absolute_url}}">
+                                <img src="{{ product.image.url }}"
+                                     class="img-fluid" alt="{{ product.keyword }}">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Product Info -->
+
+                    <div class="col-lg-8 col-md-6 pb-5">
+                        <div class="product-info dt-sl">
+                            <div class="product-title dt-sl">
+                                <h1 class="mb-3">
+                                    {{ product.title }}
+                                </h1>
+                                {% if product.title_en %}
+                                    <h3>
+                                        {{ product.title_en }}
+                                    </h3>
+                                {% endif %}
+                            </div>
+
+                            <div class="comments-product-attributes px-3 dt-sl">
+                                <div class="row">
+                                    {% for atr in attrs %}
+                                        <div class="col-sm-6 col-12 mb-3">
+                                            <form action="{% url 'product_attrs' product_id=product.id slug=atr.slug %}"
+                                                  method="post" class="allforms">
+                                                {% csrf_token %}
+                                                <div class="comments-product-attributes-title">{{ atr.title }}</div>
+                                                <input id="ex19" type="text" data-provide="slider" name="rate"
+                                                       data-slider-ticks="[1, 2, 3, 4, 5]"
+                                                       data-slider-ticks-labels='["خیلی بد", "بد", "معمولی","خوب","عالی"]'
+                                                       data-slider-min="1" data-slider-max="5" data-slider-step="1"
+                                                       data-slider-value="3" data-slider-tooltip="hide"/>
+                                            </form>
+                                        </div>
+
+                                    {% endfor %}
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row comments-add-col--content">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-ui">
+                            <div class="px-5">
+                                <form method="post" class="allforms" action="{% url 'comment_product' id=product.id %}">
+
+                                    {% csrf_token %}
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="row">
+
+                                        <div class="col-12">
+                                            <div class="form-row-title mb-2">عنوان نظر شما (اجباری)</div>
+                                            <div class="form-row">
+                                                <input type="text" name="subject" value=""
+                                                       placeholder="عنوان نظر خود را بنویسید" class="input-ui pr-2"
+                                                       required="" id="id_subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-comment-title--positive mt-2">
+                                            <div class="form-row-title mb-2 pr-2">
+                                                نقاط قوت
+                                            </div>
+                                            <div id="advantages" class="form-row">
+                                                <div class="ui-input--add-point">
+                                                    <input class="input-ui pr-2 ui-input-field" type="text"
+                                                           id="advantage-input" autocomplete="off" value="">
+                                                    <button class="ui-input-point js-icon-form-add"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="form-comment-dynamic-labels js-advantages-list"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 form-comment-title--negative mt-2">
+                                            <div class="form-row-title mb-2 pr-2">
+                                                نقاط ضعف
+                                            </div>
+                                            <div id="disadvantages" class="form-row">
+                                                <div class="ui-input--add-point">
+                                                    <input class="input-ui pr-2 ui-input-field" type="text"
+                                                           id="disadvantage-input" autocomplete="off" value="">
+                                                    <button class="ui-input-point js-icon-form-add"
+                                                            type="button"></button>
+                                                </div>
+                                                <div class="form-comment-dynamic-labels js-disadvantages-list"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-5">
+                                        <div class="form-row-title mb-2">متن نظر شما (اجباری)</div>
+                                        <div class="form-row">
+                                        <textarea name="comment" cols="40" rows="5" placeholder="متن خود را بنویسید"
+                                                  class="input-ui pr-2 pt-2" required="" id="id_comment"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 mt-2 mb-2 px-0">
+                                        <div class="product-offer-question">
+                                            <div
+                                                    class="section-title text-sm-title title-wide mb-1 no-after-title-wide">
+                                                <h2 class="font-weight-bold">آیا خرید این محصول را به دوستانتان
+                                                    پیشنهاد می کنید؟</h2>
+                                            </div>
+                                            <div class="product-offer-question-option">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="customRadio1" name="advice"
+                                                           class="custom-control-input" value="yes">
+                                                    <label class="custom-control-label" for="customRadio1">پیشنهاد
+                                                        می کنم</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="customRadio2" name="advice"
+                                                           class="custom-control-input" value="no">
+                                                    <label class="custom-control-label"
+                                                           for="customRadio2">خیر،پیشنهاد نمی کنم</label>
+                                                </div>
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" id="customRadio3" name="advice"
+                                                           class="custom-control-input" value="omm">
+                                                    <label class="custom-control-label" for="customRadio3">نظری
+                                                        ندارم</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </form>
+                                <div class="col-12 px-0">
+
+                                    <button class="btn btn btn-primary px-3" id="allsubmit"
+                                    >
+                                        ثبت نظر
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12">
+                        <h3>دیگران را با نوشتن نظرات خود، برای انتخاب این محصول راهنمایی کنید.</h3>
+                        <div class="desc-comment">
+                            <p>لطفا پیش از ارسال نظر، خلاصه قوانین زیر را مطالعه کنید:</p>
+                            <p>فارسی بنویسید و از کیبورد فارسی استفاده کنید. بهتر است از فضای خالی (Space)
+                                بیش‌از‌حدِ معمول، شکلک یا ایموجی استفاده نکنید و از کشیدن حروف یا کلمات با
+                                صفحه‌کلید بپرهیزید.</p>
+                            <p>نظرات خود را براساس تجربه و استفاده‌ی عملی و با دقت به نکات فنی ارسال کنید؛
+                                بدون
+                                تعصب به محصول خاص، مزایا و معایب را بازگو کنید و بهتر است از ارسال نظرات
+                                چندکلمه‌‌ای خودداری کنید.</p>
+                            <p>بهتر است در نظرات خود از تمرکز روی عناصر متغیر مثل قیمت، پرهیز کنید.</p>
+                            <p>به کاربران و سایر اشخاص احترام بگذارید. پیام‌هایی که شامل محتوای توهین‌آمیز و
+                                کلمات نامناسب باشند، حذف می‌شوند.</p>
+                            <p>از ارسال لینک‌های سایت‌های دیگر و ارایه‌ی اطلاعات شخصی خودتان مثل شماره تماس،
+                                ایمیل و آی‌دی شبکه‌های اجتماعی پرهیز کنید.</p>
+                            <p>با توجه به ساختار بخش نظرات، از پرسیدن سوال یا درخواست راهنمایی در این بخش
+                                خودداری کرده و سوالات خود را در بخش «پرسش و پاسخ» مطرح کنید.</p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Product -->
+        </div>
+    </main>
+    <!-- End main-content -->
+{% endblock %}
+
+
+{% block footer_ref %}
+    <script src="{% static 'js/vendor/bootstrap-slider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/jquery.fancybox.min.js' %}"></script>
+    <script src="{% static 'js/vendor/countdown.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            var inputs = $('#advantage-input, #disadvantage-input');
+            var inputChangeCallback = function () {
+                var self = $(this);
+                if (self.val().trim().length > 0) {
+                    self.siblings('.js-icon-form-add').show();
+                } else {
+                    self.siblings('.js-icon-form-add').hide();
+                }
+            };
+            inputs.each(function () {
+                inputChangeCallback.bind(this)();
+                $(this).on('change keyup', inputChangeCallback.bind(this));
+            });
+            $("#advantages").delegate(".js-icon-form-add", 'click', function (e) {
+
+                var parent = $('.js-advantages-list');
+                if (parent.find(".js-advantage-item").length >= 5) {
+                    return;
+                }
+
+                var advantageInput = $('#advantage-input');
+
+                if (advantageInput.val().trim().length > 0) {
+                    parent.append(
+                        '<div class="ui-dynamic-label ui-dynamic-label--positive js-advantage-item">\n' +
+                        advantageInput.val() +
+                        '<button type="button" class="ui-dynamic-label-remove js-icon-form-remove"></button>\n' +
+                        '<input type="hidden" name="advantage" value="' + advantageInput
+                            .val() + '">\n' +
+                        '</div>');
+
+                    advantageInput.val('').change();
+                    advantageInput.focus();
+                }
+
+            }).delegate(".js-icon-form-remove", 'click', function (e) {
+                $(this).parent('.js-advantage-item').remove();
+            });
+
+            $("#disadvantages").delegate(".js-icon-form-add", 'click', function (e) {
+
+                var parent = $('.js-disadvantages-list');
+                if (parent.find(".js-disadvantage-item").length >= 5) {
+                    return;
+                }
+
+                var disadvantageInput = $('#disadvantage-input');
+
+                if (disadvantageInput.val().trim().length > 0) {
+                    parent.append(
+                        '<div class="ui-dynamic-label ui-dynamic-label--negative js-disadvantage-item">\n' +
+                        disadvantageInput.val() +
+                        '<button type="button" class="ui-dynamic-label-remove js-icon-form-remove"></button>\n' +
+                        '<input type="hidden" name="disadvantage" value="' +
+                        disadvantageInput.val() + '">\n' +
+                        '</div>');
+
+                    disadvantageInput.val('').change();
+                    disadvantageInput.focus();
+                }
+
+            }).delegate(".js-icon-form-remove", 'click', function (e) {
+                $(this).parent('.js-disadvantage-item').remove();
+            });
+        });
+
+        $(function () {
+            $("#allsubmit").click(function () {
+                $('.allforms').each(function () {
+                    valuesToSend = $(this).serialize();
+                    $.ajax($(this).attr('action'),
+                        {
+                            method: $(this).attr('method'),
+                            data: valuesToSend
+                        }
+                    )
+                });
+            });
+        });
+        $(document).ajaxStop(function () {
+            alert('نظر شما با موفقیت ثبت شد');
+            setTimeout(function () {
+                window.location.reload();
+            }, 1000);
+
+        });
+
+
+    </script>
+{% endblock %}

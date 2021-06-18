@@ -1,0 +1,132 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+{% load filter_tags %}
+{% block title %}
+    {{ product.title }}
+{% endblock %}
+
+{% block description %}
+    {{ product.description }}
+{% endblock %}
+
+{% block keyword %}
+    {{ product.keyword }}
+{% endblock %}
+
+{% block header_ref %}
+    <!-- Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <!-- Start main-content -->
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="page-cover mb-1">
+            <div class="page-cover-title">
+                <h1>پاسخ پرسش‌های پرتکرار</h1>
+            </div>
+        </div>
+        <div class="container main-container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="page info-page-cats dt-sl dt-sn pt-3 pb-2">
+                        <div class="row">
+                            <div class="col-12 pr-4 mb-3">
+                                <div class="section-title title-wide mb-1 no-after-title-wide">
+                                    <h2 class="font-weight-bold px-res-2">دسته‌بندی پرسش‌ها</h2>
+                                </div>
+                            </div>
+                            {% for faqcat in faqCatList %}
+                                <div class="col-sm-4 col-6">
+                                    <div class="info-page-cat">
+                                        <a href="{% url 'faq_category' faqcat.id %}">
+                                            <div class="info-page-cat-icon">
+                                                <img src=" {{ faqcat.image.url }} " alt="">
+                                            </div>
+                                            <span class="info-page-cat-title">
+                                                {{ faqcat.title }}
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endfor %}
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="page dt-sl dt-sn pt-3 pb-2 mb-4">
+                        <div class="row">
+                            <div class="col-12 pr-4 mb-3">
+                                <div class="section-title title-wide mb-1 no-after-title-wide">
+                                    <h2 class="font-weight-bold">پرتکرارترین پرسش‌ها</h2>
+                                </div>
+                            </div>
+                            <div class="col-12 filter-product mb-3">
+                                <div class="accordion" id="accordionExample">
+                                    {% for faq in mostFaq %}
+                                        <div class="card">
+                                            <div class="card-header" id="headingg{{ faq.id }}">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button"
+                                                            data-toggle="collapse" data-target="#collapsee{{ faq.id }}"
+                                                            aria-expanded="false" aria-controls="collapsee{{ faq.id }}">
+                                                        {{ faq.question }}
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapsee{{ faq.id }}" class="collapse"
+                                                 aria-labelledby="headingg{{ faq.id }}"
+                                                 data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    {{ faq.answer|safe }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="page-question-not-found">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-question-not-found-text">
+                                    جواب یا پرسش خود را پیدا نکردید؟
+                                    <br>
+                                    روش‌های ارتباط با ما
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 text-center">
+                                <img src="{% static 'images/faq/phone.svg' %}" alt="">
+                                <div class="page-contact-option-text">تماس تلفنی</div>
+                                <div class="page-contact-option-text mr-3">۰۲۱-۶۱۹۳۰۰۰۰</div>
+                            </div>
+                            <div class="col-md-6 col-sm-12 text-center">
+                                <img src="{% static 'images/faq/email.svg' %}" class="mb-5" alt="">
+                                <a href="{% url 'contact' %}" class="btn btn-info pr-4 pl-4">ارسال پیام</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- End main-content -->
+{% endblock %}
+
+{% block footer_ref %}
+    <!-- Plugins -->
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+
+{% endblock %}

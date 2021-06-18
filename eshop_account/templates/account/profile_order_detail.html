@@ -1,0 +1,258 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load render_partial %}
+
+{% load humanize %}
+
+{% block header_ref %}
+    <link rel="stylesheet" href="{% static 'css/vendor/nice-select.css' %}">
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+{% endblock %}
+
+{% block title %}
+    حساب کاربری
+{% endblock %}
+
+{% block description %}
+    حساب کاربری
+{% endblock %}
+
+{% block keyword %}
+    حساب کاربری
+{% endblock %}
+
+{% block content %}
+
+    <main class="main-content dt-sl mt-4 mb-3" style="transform: none;">
+    <div class="container main-container" style="transform: none;">
+    <div class="row" style="transform: none;">
+
+        <!-- Start Sidebar -->
+        {% render_partial 'profile_sidebar' %}
+        <!-- End Sidebar -->
+
+        <!-- Start Content -->
+        <div class="col-xl-9 col-lg-8 col-md-8 col-sm-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="profile-navbar">
+                        <a href="/profile/orders" class="profile-navbar-btn-back">بازگشت</a>
+                        <h4>سفارش <span
+                                class="font-en">{{ order.code }}</span><span>ثبت شده در تاریخ {{ order.j_create_at }}
+                                           </span></h4>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="dt-sl dt-sn">
+                        <div class="row table-draught px-3">
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">تحویل گیرنده:</span>
+                                <span class="value">{{ order.address_full_name }}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">شماره تماس تحویل گیرنده:</span>
+                                <span class="value">{{ order.address_phone }}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">کد سفارش:</span>
+                                <span class="value">{{ order.code }}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">نحوه ارسال سفارش:</span>
+                                <span class="value">{{ order.post_way.way }}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">هزینه ارسال:</span>
+                                <span class="value">{% if order.post_way.price == 0 %} رایگان
+                                    {% else %}{{ order.post_way.price|intcomma:False }} تومان {% endif %}</span>
+                            </div>
+                            <div class="col-md-6 col-sm-12">
+                                <span class="title">مبلغ این سفارش:</span>
+                                <span class="value">{{ order.total|intcomma:False }} تومان</span>
+                            </div>
+                            <div class="col-12 text-center pb-0">
+                                <span class="title">آدرس تحویل گیرنده:</span>
+                                <span class="value"> آدرس : استان {{ order.address_ostsn }} ،
+                                                    شهر ‌ {{ order.address_city }} ، {{ order.address_address }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <section class="slider-section dt-sl mb-5">
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <div class="section-title text-sm-title title-wide no-after-title-wide">
+                                    <h2> {{ order.amount }} مرسوله</h2>
+                                    {#                                    <a href="#">لغو دریافت مرسوله</a>#}
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="profile-order-steps carousel-lg owl-carousel owl-theme owl-rtl owl-loaded owl-drag">
+                                    <div class="owl-stage-outer">
+                                        <div class="owl-stage"
+                                             style="transform: translate3d(0px, 0px, 0px); transition: all 0s ease 0s; width: 1049px;">
+                                            <div class="owl-item active" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item is-active" id="first">
+                                                    <img src="{% static 'images/svg/0eab59b0.svg' %}">
+                                                    <span>{% if num == 0 %} لغو سفارش {% else %} در
+                                                        انتظار تایید {% endif %}</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item active" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 2 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/d5d5e1d2.svg' %}">
+                                                    <span>تایید سفارش</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item active" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 3 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/3db3cdeb.svg' %}">
+                                                    <span>آماده‌سازی سفارش</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item active" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 4 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/332b9ff1.svg' %}">
+                                                    <span>خروج از مرکز پردازش</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 5 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/07a0808a.svg' %}">
+                                                    <span>تحویل به پست</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 6 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/dbab74ce.svg' %}">
+                                                    <span>مرکز مبادلات پست</span>
+                                                </div>
+                                            </div>
+                                            <div class="owl-item" style="width: 139.8px; margin-left: 10px;">
+                                                <div class="item profile-order-steps-item {% if num >= 7 %}is-active{% endif %}">
+                                                    <img src="{% static 'images/svg/50450a73.svg' %}">
+                                                    <span>تحویل به مشتری</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="owl-nav">
+                                        <button type="button" role="presentation" class="owl-prev disabled"><i
+                                                class="mdi mdi mdi-chevron-right"></i></button>
+                                        <button type="button" role="presentation" class="owl-next"><i
+                                                class="mdi mdi mdi-chevron-left"></i></button>
+                                    </div>
+                                    <div class="owl-dots">
+                                        <button role="button" class="owl-dot active"><span></span></button>
+                                        <button role="button" class="owl-dot"><span></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Profile-order-step-Slider -->
+
+                        </div>
+                    </section>
+                </div>
+                <div class="col-12">
+                    <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide dt-sl mb-2 px-res-1">
+                        <h2>همه سفارش‌ها</h2>
+                    </div>
+                    <div class="dt-sl">
+                        <div class="table-responsive">
+                            <table class="table table-order table-order-details">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>نام محصول</th>
+                                    <th>تعداد</th>
+                                    <th>قیمت واحد</th>
+                                    <th>قیمت کل</th>
+                                    <th>تخفیف</th>
+                                    <th>قیمت نهایی</th>
+                                    <th>عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for pro in products %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div class="details-product-area">
+                                                {% if pro.product.status == 'True' %}
+                                                    <a href="{{ pro.product.get_absolute_url }}">
+                                                {% endif %}
+                                                {% if pro.variant %}
+                                                    {% if pro.variant.image %}
+                                                        <img
+                                                                src="{{ pro.variant.image }}"
+                                                                class="thumbnail-product" alt="">
+                                                    {% else %}
+                                                        <img
+                                                                src="{{ pro.product.image.url }}"
+                                                                class="thumbnail-product" alt="">
+                                                    {% endif %}
+                                                {% else %}
+                                                    <img
+                                                            src="{{ pro.product.image.url }}"
+                                                            class="thumbnail-product" alt="">
+                                                {% endif %}
+                                                </a>
+                                                <h5 class="details-product">
+                                                    {% if pro.variant %}
+                                                        <span>{{ pro.variant.title }}</span>
+                                                        {% if  pro.variant.size %}
+                                                            <span>سایز : {{ pro.variant.size }} </span>
+                                                        {% endif %}
+                                                        {% if  pro.variant.color %}
+                                                            <span>رنگ : {{ pro.variant.color }}</span>
+
+
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span>{{ pro.product.title }}</span>
+                                                    {% endif %}
+
+                                                </h5>
+                                            </div>
+                                        </td>
+                                        <td>{{ pro.quantity }}</td>
+                                        <td>{{ pro.price|intcomma:False }} تومان</td>
+                                        <td>{{ pro.amount|intcomma:False }} تومان</td>
+                                        <td>۰</td>
+                                        <td>{{ pro.amount|intcomma:False }} تومان</td>
+                                        <td>
+                                            {% if pro.product.status == 'True' %}
+                                                <a href="{{ pro.product.get_absolute_url }}">
+                                                    <button class="btn btn-info d-block w-100 mb-2">خرید
+                                                        مجدد
+                                                    </button>
+                                                </a>
+                                                <a href="{% url 'comment_product' pro.product.id %}">
+                                                    <button class="btn text-light bg-secondary d-block w-100">ثبت
+                                                        نظر
+                                                    </button>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Content -->
+    </div>
+    {% render_partial 'product_slider' %}
+{% endblock %}
+{% block footer_ref %}
+    <script src="{% static 'js/vendor/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+{% endblock %}

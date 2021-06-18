@@ -1,0 +1,448 @@
+{% extends 'shared/_MainLayout.html' %}
+{% load static %}
+{% load humanize %}
+{% load filter_tags %}
+
+{% block header_ref %}
+
+    <!-- Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor/nouislider.min.css' %}">
+
+{% endblock %}
+
+{% block content %}
+    <main class="main-content dt-sl mt-4 mb-3">
+        <div class="container main-container">
+            <div class="row">
+                <!-- Start Sidebar -->
+                <div class="col-lg-3 col-md-12 col-sm-12 sticky-sidebar">
+                    <div class="dt-sn mb-3">
+                        <form method="get" action="">
+                            {% if request.GET.q %}
+                                <input type="text" hidden value="{{ request.GET.q }}" name='q'>
+                            {% endif %}
+                            <div class="col-12">
+                                <div class="section-title text-sm-title title-wide mb-1 no-after-title-wide">
+                                    <h2>فیلتر محصولات</h2>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="widget-search">
+                                    <input type="text" name="title" id="search-title"
+                                           placeholder="نام محصول یا برند مورد نظر را بنویسید...">
+                                    <button class="btn-search-widget">
+                                        <img src="{% static 'images/theme/search.png' %}" alt="">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-12 filter-product mb-3">
+                                <div class="accordion" id="accordionExample">
+                                    {% if childs %}
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button"
+                                                            data-toggle="collapse" data-target="#collapseOne"
+                                                            aria-expanded="false" aria-controls="collapseOne">
+                                                        دسته‌بندی
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                 data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    {% for child in childs %}
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input but"
+                                                                   {% if  "category"|check_url:child.slug in  request.GET.urlencode %}checked{% endif %}
+                                                                   id="customCheckCat{{ child.id }}" name="category"
+                                                                   value="{{ child.slug }}">
+                                                            <label class="custom-control-label"
+                                                                   for="customCheckCat{{ child.id }}">
+                                                                {{ child.title }}</label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+
+                                    {% if brands %}
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button"
+                                                            data-toggle="collapse" data-target="#collapseOne"
+                                                            aria-expanded="false" aria-controls="collapseOne">
+                                                        برندها
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                                                 data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    {% for brand in brands %}
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input but"
+                                                                   {% if  "brand"|check_url:brand.slug in  request.GET.urlencode %}checked{% endif %}
+                                                                   id="customCheckBrand{{ brand.id }}" name="brand"
+                                                                   value="{{ brand.slug }}">
+                                                            <label class="custom-control-label"
+                                                                   for="customCheckBrand{{ brand.id }}">
+                                                                {{ brand.title }}</label>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+
+                                    {% if colors %}
+                                        <div class="card">
+                                            <div class="card-header" id="headingFour">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button"
+                                                            data-toggle="collapse" data-target="#collapseFour"
+                                                            aria-expanded="false" aria-controls="collapseFour">
+                                                        رنگها
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseFour" class="collapse show" aria-labelledby="headingFour"
+                                                 data-parent="#accordionExample">
+                                                <div class="card-body">
+
+                                                    {% for color in colors %}
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input but"
+
+                                                                   {% if  "variants__color"|check_url:color.id in  request.GET.urlencode %}checked{% endif %}
+                                                                   id="customCheckColor{{ color.id }}"
+                                                                   value="{{ color.id }}"
+                                                                   name="variants__color">
+                                                            <label class="custom-control-label"
+                                                                   for="customCheckColor{{ color.id }}">{{ color.name }}</label>
+                                                            <span class="filter-color"
+                                                                  style="background-color:{{ color.code }}"></span>
+                                                        </div>
+                                                    {% endfor %}
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    {% if sizes %}
+                                        <div class="card">
+                                            <div class="card-header" id="headingFour">
+                                                <h2 class="mb-0">
+                                                    <button class="btn btn-block text-right collapsed" type="button"
+                                                            data-toggle="collapse" data-target="#collapseFour"
+                                                            aria-expanded="false" aria-controls="collapseFour">
+                                                        سایزها
+                                                        <i class="mdi mdi-chevron-down"></i>
+                                                    </button>
+                                                </h2>
+                                            </div>
+                                            <div id="collapseFour" class="collapse show" aria-labelledby="headingFour"
+                                                 data-parent="#accordionExample">
+                                                <div class="card-body">
+
+                                                    {% for size in sizes %}
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input but"
+
+                                                                   {% if  "variants__size"|check_url:size.id in  request.GET.urlencode %}checked{% endif %}
+                                                                   id="customCheckColor{{ size.id }}"
+                                                                   value="{{ size.id }}"
+                                                                   name="variants__size">
+                                                            <label class="custom-control-label"
+                                                                   for="customCheckColor{{ size.id }}">{{ size.name }}</label>
+                                                            <span class="filter-color"
+                                                                  style="background-color:{{ size.id }}"></span>
+                                                        </div>
+                                                    {% endfor %}
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+                            <input type="text" hidden class="custom-control-input but"
+                                   id="orderBy"
+                                   value="id"
+                                   name="order_by">
+                            <div class="col-12 mb-4">
+                                <div class="section-title text-sm-title title-wide no-after-title-wide mb-1">
+                                    <h2>فیلتر براساس قیمت :</h2>
+                                </div>
+                                <div class="mt-2 mb-2">
+                                    <div id="slider-non-linear-step"></div>
+                                </div>
+                                <div class="mt-2 mb-2 text-center pt-2">
+                                    <span>قیمت از  </span>
+                                    <span class="example-val" id="slider-non-linear-step-value"></span> تومان
+                                    <input type="number" hidden id="input-min" name="min_price" value="">
+                                    <input type="number" hidden id="input-max" name="max_price" value="">
+                                </div>
+
+                            </div>
+                            <div class="col-12 mb-3">
+                                <div class="parent-switcher">
+                                    <label class="ui-statusswitcher">
+                                        <input type="checkbox" id="switcher-1" name="amount" value="1"
+                                               {% if  "amount=1" in  request.GET.urlencode %}checked{% endif %}>
+                                        <span class="ui-statusswitcher-slider">
+                                                <span class="ui-statusswitcher-slider-toggle"></span>
+                                            </span>
+                                    </label>
+                                    <label class="label-switcher" for="switcher-1">فقط کالاهای موجود</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button class="btn btn-info btn-block" type="submit">
+                                    فیلتر
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- End Sidebar -->
+
+                <!-- Start Content -->
+                <div class="col-lg-9 col-md-12 col-sm-12 search-card-res">
+                    <div class="dt-sl dt-sn px-0 search-amazing-tab">
+
+                        <div id="navcontainer">
+                            <ul id="navlist">
+                                <li id="active">
+                                    <a data-order="id" href="{% order_url "id" "order_by" request.GET.urlencode %}"
+                                       class="order-list {% if 'order_by=id' in request.GET.urlencode  or 'order_by' not in request.GET.urlencode %}active{% endif %}"
+                                       id="current"
+                                    >
+                                        مرتبط ترین
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-order="view_count"
+                                       class="order-list {% if 'order_by=view_count' in request.GET.urlencode %}active{% endif %}"
+                                       href="{% order_url "view_count" "order_by" request.GET.urlencode %}">
+                                        پربازدید ترین
+
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-order="-id"
+                                       class="order-list {% if 'order_by=-id' in request.GET.urlencode %}active{% endif %}"
+                                       href="{% order_url '-id' 'order_by' request.GET.urlencode %}">
+                                        جدید ترین
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-order="all_sale"
+                                       class="order-list {% if 'order_by=all_sale' in request.GET.urlencode %}active{% endif %}"
+                                       href="{% order_url 'all_sale' 'order_by' request.GET.urlencode %}">
+                                        پرفروش ترین
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-order="price"
+                                       class="order-list {% if 'order_by=price' in request.GET.urlencode %}active{% endif %}"
+                                       href="{% order_url 'price' 'order_by' request.GET.urlencode %}">
+                                        ارزان ترین
+                                    </a>
+                                </li>
+                                <li>
+                                    <a data-order="-price"
+                                       class="order-list {% if 'order_by=-price' in request.GET.urlencode %}active{% endif %}"
+                                       href="{% order_url '-price' 'order_by' request.GET.urlencode %}">
+                                        گران ترین
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="ah-tab-content-wrapper dt-sl px-res-0">
+                            <div class="ah-tab-content dt-sl" data-ah-tab-active="true">
+                                <div class="row mb-3 mx-0 px-res-0">
+                                    {% if page_obj %}
+                                        {% for product in page_obj %}
+                                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 px-10 mb-1 px-res-0">
+                                                <div class="product-card mb-2 mx-res-0">
+                                                    <a class="product-thumb"
+                                                       href="{{ product.get_absolute_url }}">
+                                                        <img src="{{ product.image.url }}" alt="Product Thumbnail"
+                                                             style="height: 154px; width: 154px;">
+                                                    </a>
+                                                    <div class="product-card-body">
+                                                        <a class="product-meta"
+                                                           href="{{ product.get_absolute_url }}">{{ product.title|truncatechars:50 }}</a>
+                                                        <span class="product-price">{{ product.price|intcomma:False }} تومان</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="pagination">
+                                                    {% if page_obj.has_previous %}
+                                                        <a href="{% my_url page_obj.previous_page_number 'page' request.GET.urlencode %}"
+
+                                                           class="prev"><i
+                                                                class="mdi mdi-chevron-double-right"></i></a>
+                                                    {% endif %}
+                                                    {% for page in page_obj.paginator.page_range %}
+                                                        {% if page == page_obj.number %}
+                                                            <a href="{% my_url page 'page' request.GET.urlencode %}"
+                                                               class="active-page">{{ page }}</a>
+                                                        {% else %}
+                                                            <a href="{% my_url page 'page' request.GET.urlencode %}">{{ page }}</a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if page_obj.has_next %}
+                                                        <a href="{% my_url page_obj.next_page_number 'page' request.GET.urlencode %}"
+
+                                                           class="next"><i class="mdi mdi-chevron-double-left"></i></a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+
+                                        <div class="alert alert-danger text-center mr-5 ml-5 btn-block" role="alert">
+                                            متاسفانه محصولی یافت نشد
+                                        </div>
+
+
+                                    {% endif %}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- End Content -->
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
+{% block footer_ref %}
+    <!-- Plugins -->
+    <script src="{% static 'js/vendor/nouislider.min.js' %}"></script>
+    <script src="{% static 'js/vendor/wNumb.js' %}"></script>
+    <script src="{% static 'js/vendor/ResizeSensor.min.js' %}"></script>
+    <script src="{% static 'js/vendor/theia-sticky-sidebar.min.js' %}"></script>
+
+    <!-- Main JS File -->
+    <script>
+        $(document).ready(function () {
+                // query string in url
+                function getParameterByName(name, url = window.location.href) {
+                    name = name.replace(/[\[\]]/g, '\\$&');
+                    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                        results = regex.exec(url);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, ' '));
+                }
+
+                ////////////////////////////////
+                // query string: ?title=example
+                var title = getParameterByName('title');
+
+                // change place holder with url parameters
+                if (title != '') {
+                    var searchT = document.getElementById('search-title');
+                    searchT.value = title;
+                }
+
+                //////////////////////////////////
+                // query string: ?min_price=0&max_price=1000
+                var min_price = getParameterByName('min_price');
+                var max_price = getParameterByName('max_price');
+
+                // change price range by url parameters
+                var start = ''
+                if (min_price == null) {
+                    start = [0, 100000000];
+                } else {
+                    start = [parseInt(min_price), parseInt(max_price)];
+                }
+
+
+                //price slider range and inputs
+
+                var nonLinearStepSlider = document.getElementById('slider-non-linear-step');
+                var input0 = document.getElementById('input-min');
+                var input1 = document.getElementById('input-max');
+                var inputs = [input0, input1];
+
+                noUiSlider.create(nonLinearStepSlider, {
+                    start: start,
+                    connect: true,
+                    direction: 'rtl',
+                    format: wNumb({
+                        decimals: 0,
+                    }),
+                    range: {
+                        'min': [0, 100],
+                        '10%': [20000, 500],
+                        '20%': [1000000, 500],
+                        '30%': [3000000, 1000],
+                        '40%': [8000000, 1000],
+                        '50%': [20000000, 1000],
+                        '60%': [40000000, 500000],
+                        '70%': [60000000, 500000],
+                        '80%': [70000000, 1000000],
+                        '90%': [80000000, 1000000],
+                        'max': [100000000]
+                    }
+                });
+
+
+                function numberWithCommas(x) {
+                    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+                var nonLinearStepSliderValueElement = document.getElementById('slider-non-linear-step-value');
+
+                nonLinearStepSlider.noUiSlider.on('update', function (values, handle) {
+                    nonLinearStepSliderValueElement.innerHTML = numberWithCommas(values.join(' تا '));
+
+                    <!-- send data too input price -->
+                    inputs[handle].value = values[handle];
+
+                });
+            }
+        );
+
+        <!-- send data too order_by input -->
+        $(function () {
+            order_by_input();
+        });
+
+        function order_by_input() {
+            var data_order = $('ul#navlist').find('a.active').data('order');
+            var order_input = document.getElementById('orderBy');
+            order_input.value = data_order
+
+        }
+
+    </script>
+
+{% endblock %}
+
+
