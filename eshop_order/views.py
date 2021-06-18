@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
-# Create your views here.
 from django.utils.crypto import get_random_string
 
 from eshop_account.models import UserProfile, UserAddress

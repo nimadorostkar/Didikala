@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
-
 from eshop_account.models import UserAddress
 from eshop_order.models import ShopCart, Order, OrderProduct, PostWay
 
