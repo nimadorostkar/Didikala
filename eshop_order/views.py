@@ -222,7 +222,9 @@ def pay_page(request):
         'totalPriceWithPost': totalPriceWithPost,
         'forms': forms
     }
+    print(totalPriceWithPost)        # The total price we should to get
     return render(request, 'order/payment.html', context)
+
 
 
 @login_required(login_url='/login')  # Check login
