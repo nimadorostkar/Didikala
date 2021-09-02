@@ -16,35 +16,35 @@ The website displays products. Users can add and remove products to/from their c
 <table>
   <tr>
   <td align="center">
-      <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/login.png">
+      <a href="https://github.com/nimadorostkar/Didikala/blob/master/screenshots/1.png">
         <img src="screenshots/1.png" alt="home page">
       </a>
       <br />
       <p>home page</p>
     </td>
     <td align="center">
-      <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/dashboard.png">
+      <a href="https://github.com/nimadorostkar/Didikala/blob/master/screenshots/2.png">
         <img src="screenshots/2.png" alt="products">
       </a>
       <br />
       <p>products</p>
     </td>
     <td align="center">
-      <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/contacts.png">
+      <a href="https://github.com/nimadorostkar/Didikala/blob/master/screenshots/3.png">
         <img src="screenshots/3.png" alt="account">
       </a>
       <br />
       <p>account</p>
     </td>
     <td align="center">
-      <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/product.png">
+      <a href="https://github.com/nimadorostkar/Didikala/blob/master/screenshots/4.png">
         <img src="screenshots/4.png" alt="orders">
       </a>
       <br />
       <p>orders</p>
     </td>
     <td align="product pag">
-      <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/tasks.png">
+      <a href="https://github.com/nimadorostkar/Didikala/blob/master/screenshots/5.png">
         <img src="screenshots/5.png" alt="product page">
       </a>
       <br />
