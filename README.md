@@ -36,7 +36,7 @@ The website displays products. Users can add and remove products to/from their c
       <br />
       <p>account</p>
     </td>
-    <td align="orders">
+    <td align="center">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/product.png">
         <img src="screenshots/4.png" alt="orders">
       </a>
