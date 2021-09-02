@@ -15,19 +15,19 @@ The website displays products. Users can add and remove products to/from their c
 
 <table>
   <tr>
-  <td align="center">
+  <td align="home page">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/login.png">
         <img src="screenshots/1.png" alt="home page">
       </a>
       <br />
-      <p>Login Page</p>
+      <p>products</p>
     </td>
     <td align="center">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/dashboard.png">
         <img src="screenshots/2.png" alt="products">
       </a>
       <br />
-      <p>Dashboard</p>
+      <p>account</p>
     </td>
     <td align="center">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/contacts.png">
@@ -36,14 +36,14 @@ The website displays products. Users can add and remove products to/from their c
       <br />
       <p>Contacts</p>
     </td>
-    <td align="center">
+    <td align="orders">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/product.png">
         <img src="screenshots/4.png" alt="orders">
       </a>
       <br />
       <p>Products</p>
     </td>
-    <td align="center">
+    <td align="product pag">
       <a href="https://github.com/nimadorostkar/DjangoCRM/blob/master/screenshots/tasks.png">
         <img src="screenshots/5.png" alt="product page">
       </a>
