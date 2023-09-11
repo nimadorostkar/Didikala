@@ -1,10 +1,8 @@
 import itertools
 import json
-
 from django.shortcuts import render
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseNotFound
 from django.template.loader import render_to_string
-
 from eshop_attribute.models import AttrProduct
 from eshop_brand.models import Brand
 from eshop_category.models import Category
@@ -214,6 +212,7 @@ def my_grouper(n, iterable):
     return ([e for e in t if e is not None] for t in itertools.zip_longest(*args))
 
 
+
 def product_detail(request, product_id, slug):
     query = request.GET.get('qv')
     product = Product.objects.get_by_id(product_id)
@@ -282,6 +281,7 @@ def product_detail(request, product_id, slug):
                  })
 
     return render(request, 'product/product_detail.html', context)
+
 
 
 def ajaxcolor(request):
