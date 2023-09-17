@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -14,7 +15,8 @@ SECRET_KEY = '1^%12q4s7^@86prla^qv16*i0-&ml0zx8e+t^(hm66-q&v5#+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -175,6 +177,7 @@ CKEDITOR_CONFIGS = {
 RECAPTCHA_PUBLIC_KEY = '6Le4K_4ZAAAAAFlxvlemZk5oeKMgrXrmNMtbbZLT'
 RECAPTCHA_PRIVATE_KEY = '6Le4K_4ZAAAAAIE5eYCdFbJrdfSOJUuuASyRVIfX'
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
 
 
 # REST_FRAMEWORK CONFIGURATION
