@@ -7,6 +7,7 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 
+
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)
     name, ext = os.path.splitext(base_name)
@@ -55,5 +56,4 @@ class Category(MPTTModel):
 
     def category_active(self):
         return self.objects.filter(status=True)
-
 
