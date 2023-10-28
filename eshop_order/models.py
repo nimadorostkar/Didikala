@@ -1,7 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-
-# Create your models here.
 from django.utils.safestring import mark_safe
 from eshop_account.models import UserAddress
 from eshop_product.models import Product
@@ -20,6 +18,7 @@ class PostWay(models.Model):
 
     def __str__(self):
         return self.way
+
 
 
 class ShopCart(models.Model):
