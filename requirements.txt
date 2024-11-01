@@ -4,7 +4,7 @@ certifi==2021.5.30
 chardet==4.0.0
 coreapi==2.3.3
 coreschema==0.0.4
-Django==3.2.4
+Django==3.2.25
 django-admin-thumbnail==0.1
 django-admin-thumbnails==0.2.6
 django-ckeditor==6.1.0
@@ -25,7 +25,7 @@ itypes==1.2.0
 Jinja2==3.0.1
 MarkupSafe==2.0.1
 packaging==20.9
-Pillow==8.2.0
+Pillow==11.0.0
 pyparsing==2.4.7
 pytz==2021.1
 requests==2.25.1
@@ -38,3 +38,4 @@ typing-extensions==3.10.0.0
 uritemplate==3.0.1
 urllib3==1.26.5
 zipp==3.4.1
+zeep==4.3.1
