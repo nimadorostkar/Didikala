@@ -85,6 +85,8 @@ class Order(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='ایجاد شده')
     update_at = models.DateTimeField(auto_now=True, verbose_name='آخرین آپدیت')
 
+    # add pay filds here and create pay apis...
+
     def __str__(self):
         return self.user.first_name
 
