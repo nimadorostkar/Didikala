@@ -197,3 +197,14 @@ REST_FRAMEWORK = {
      'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
+
+
+
+# ZARRINPAL CONFIGURATION
+ZARRINPAL_URL="https://api.zarinpal.com/pg/"
+ZARRINPAL_MERCHANT_ID = "c0b8169f-deb9-46a2-a1c3-7f45f9df1e4a"
+ZP_API_REQUEST = "https://www.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
+ZP_API_VERIFY = "https://www.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
+ZP_API_STARTPAY = "https://www.zarinpal.com/pg/StartPay/"
+ZARIN_CALL_BACK = 'https://api.studyways.ir/pay-verify/'
+# END ZARRINPAL CONFIGURATION

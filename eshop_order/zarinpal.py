@@ -105,10 +105,11 @@ def ZarinpalGateway(request):
         request.session['cart_items'] = 0
         order = Order.objects.get(id=data.id)
 
-        authority = self.request.query_params.get("Authority")
+        #authority = request.query_params.get("Authority")
+        authority = request.GET.get('Authority')
 
         data = {
-            "MerchantID": "0000-0000-0000000-000000",
+            "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
             "Amount": totalPriceWithPost,
             "Description": "پرداخت هزینه خرید آنلاین",
             "Authority": authority,
@@ -131,12 +132,15 @@ def ZarinpalGateway(request):
                     order.authority = response['Authority']
                     order.save()
 
-                    link = settings.ZP_API_STARTPAY + str(response['Authority'])
-                    # go to this link
+                    redirect_url = settings.ZP_API_STARTPAY+str(response['Authority'])
+                    return redirect(redirect_url)
                 else:
-                    return Response(response['errors'], status=400)
+                    return HttpResponse(response['errors'])
+                    #return Response(response['errors'], status=400)
                     # return {'status': False, 'code': str(response['Status'])}
-            return response
+            #return response
+            return HttpResponse(response)
+
 
         except requests.exceptions.Timeout:
             return {'status': False, 'code': 'timeout'}
