@@ -183,6 +183,7 @@ def way_selected(request, id):
     return HttpResponseRedirect(url)
 
 
+
 @login_required(login_url='/login')  # Check login
 def pay_page(request):
     current_user = request.user
@@ -224,6 +225,7 @@ def pay_page(request):
     }
     print(totalPriceWithPost)        # The total price we should to get
     return render(request, 'order/payment.html', context)
+
 
 
 

@@ -238,7 +238,7 @@
                                 <span class="checkout-summary-price-value-amount">{{ totalPriceWithPost|intcomma:False }}</span>
                                 تومان
                             </div>
-                            <form action="{% url 'order_completed' %}" method="post">
+                            <form action="{% url 'zp_gateway' %}" method="post">
                                 {% csrf_token %}
                                 <a href="" class="mb-2 d-block">
                                     <button type="submit"

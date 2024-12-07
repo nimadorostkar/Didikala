@@ -85,6 +85,10 @@ class Order(models.Model):
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='ایجاد شده')
     update_at = models.DateTimeField(auto_now=True, verbose_name='آخرین آپدیت')
 
+    ref_id = models.CharField(max_length=256, null=True, blank=True)
+    authority = models.CharField(max_length=256, null=True, blank=True)
+    paid = models.BooleanField(default=False)
+
     # add pay filds here and create pay apis...
 
     def __str__(self):

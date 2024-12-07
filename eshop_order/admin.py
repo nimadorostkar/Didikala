@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from eshop_account.models import UserAddress
 from eshop_order.models import ShopCart, Order, OrderProduct, PostWay
 
@@ -22,11 +21,10 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['status']
     fields = (
         'status', 'admin_note', 'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address',
-        'amount', 'total_th', 'post_w', 'post_p', 'ip',)
+        'amount', 'total_th', 'post_w', 'post_p', 'ip', 'ref_id', 'authority', 'paid')
     readonly_fields = (
         'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address', 'amount', 'total_th',
-        'post_w', 'post_p',
-        'ip',)
+        'post_w', 'post_p','ip', 'ref_id', 'authority', 'paid')
     can_delete = False
     inlines = [OrderProductline]
 
