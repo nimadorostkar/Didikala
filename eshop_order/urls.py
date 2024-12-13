@@ -1,5 +1,5 @@
 from django.urls import path
-from eshop_order.zarinpal import ZarinpalGateway
+from eshop_order.zarinpal import ZarinpalGateway,PaymentVerify
 from eshop_order.views import (
     addtoshopcart, shopcart, removeshopcart,
     shipping_page, order_completed,
@@ -16,5 +16,5 @@ urlpatterns = [
     path('way_selected/<int:id>', way_selected, name='way_selected'),
     path('payment', pay_page, name='pay_page'),
     path('zp_gateway', ZarinpalGateway, name='zp_gateway'),
-
+    path('pay_verify/<str:ordercode>', PaymentVerify, name='pay_verify'),
 ]

@@ -55,6 +55,7 @@ def ZarinpalGateway(request):
         # return HttpResponse(request.POST.items())
         # Send Credit card to bank,  If the bank responds ok, continue, if not, show the error
         # ..............
+
         data = Order()
         data.user = request.user  # get product quantity from form
         data.address_address = selected_address.address
@@ -70,42 +71,9 @@ def ZarinpalGateway(request):
         data.ip = request.META.get('REMOTE_ADDR')
         ordercode = get_random_string(10).upper()  # random cod
         data.code = ordercode
-        data.save()  #
-        for rs in shopcart:
-            detail = OrderProduct()
-            detail.order_id = data.id  # Order Id
-            detail.product_id = rs.product_id
-            detail.user_id = current_user.id
-            detail.quantity = rs.quantity
-            detail.amount = rs.amount
+        data.save()
 
-            # check the variant is status active
-            variants = Variants.objects.filter(product_id=rs.product_id, status='True')
-            if rs.product.variant == 'None' or variants.count() == 0:
-                detail.price = rs.product.price
-            else:
-                detail.price = rs.variant.price
-            detail.variant_id = rs.variant_id
-            detail.save()
-
-            if rs.product.variant == 'None' or variants.count() == 0:
-                product = Product.objects.get(id=rs.product_id)
-                product.amount -= rs.quantity
-                product.all_sale += rs.quantity
-                product.save()
-            else:
-                variant = Variants.objects.get(id=rs.variant_id)
-                product = Product.objects.get(id=rs.product_id)
-                variant.quantity -= rs.quantity
-                product.all_sale += rs.quantity
-                variant.save()
-                product.save()
-
-        ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
-        request.session['cart_items'] = 0
         order = Order.objects.get(id=data.id)
-
-        #authority = request.query_params.get("Authority")
         authority = request.GET.get('Authority')
 
         data = {
@@ -113,7 +81,7 @@ def ZarinpalGateway(request):
             "Amount": totalPriceWithPost,
             "Description": "پرداخت هزینه خرید آنلاین",
             "Authority": authority,
-            "CallbackURL": settings.ZARIN_CALL_BACK + str(order.code) + "/",
+            "CallbackURL": settings.ZARIN_CALL_BACK + str(order.code),
             "OrderID": order.code
         }
         data = json.dumps(data)
@@ -141,8 +109,85 @@ def ZarinpalGateway(request):
             #return response
             return HttpResponse(response)
 
-
         except requests.exceptions.Timeout:
             return {'status': False, 'code': 'timeout'}
         except requests.exceptions.ConnectionError:
             return {'status': False, 'code': 'connection error'}
+
+
+
+
+
+@login_required(login_url='/login')
+def PaymentVerify(request,ordercode):
+    current_user = request.user
+
+    # find shop carts
+    shopcart = ShopCart.objects.filter(user_id=current_user.id)
+
+    if request.method == 'GET':
+        status = request.GET.get('Status')
+        authority = request.GET.get('Authority')
+        order = Order.objects.get(code=ordercode)
+
+        if not authority or status != "OK":
+            order.delete()
+            #return redirect('https://app.studyways.ir/dashboard/student/callback?success=notok')
+            return HttpResponse("payment faild...", content_type='text/plain')
+
+        data = {
+            "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
+            "Amount": order.total,
+            "Authority": authority,
+        }
+        data = json.dumps(data)
+        headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+        response = requests.post(settings.ZP_API_VERIFY, data=data, headers=headers)
+
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+
+                order.ref_id = response['RefID']
+                order.paid = True
+                order.save()
+                for rs in shopcart:
+                    detail = OrderProduct()
+                    detail.order_id = order.id  # Order Id
+                    detail.product_id = rs.product_id
+                    detail.user_id = current_user.id
+                    detail.quantity = rs.quantity
+                    detail.amount = rs.amount
+
+                    # check the variant is status active
+                    variants = Variants.objects.filter(product_id=rs.product_id, status='True')
+                    if rs.product.variant == 'None' or variants.count() == 0:
+                        detail.price = rs.product.price
+                    else:
+                        detail.price = rs.variant.price
+                    detail.variant_id = rs.variant_id
+                    detail.save()
+
+                    if rs.product.variant == 'None' or variants.count() == 0:
+                        product = Product.objects.get(id=rs.product_id)
+                        product.amount -= rs.quantity
+                        product.all_sale += rs.quantity
+                        product.save()
+                    else:
+                        variant = Variants.objects.get(id=rs.variant_id)
+                        product = Product.objects.get(id=rs.product_id)
+                        variant.quantity -= rs.quantity
+                        product.all_sale += rs.quantity
+                        variant.save()
+                        product.save()
+
+                ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
+                request.session['cart_items'] = 0
+
+                #return redirect(f'https://app.studyways.ir/dashboard/student/callback?success=ok&payment_id={response["RefID"]}')
+                return HttpResponse("payment done, RefID={}".format(response['RefID']), content_type='text/plain')
+            else:
+                return SuccessResponse(data={'status': False, 'details': 'Subscription already paid'})
+        return SuccessResponse(data=response.content)
+
+

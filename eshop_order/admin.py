@@ -16,14 +16,13 @@ class OrderProductline(admin.TabularInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['user_name', 'address_city', 'address_ostsn', 'address_phone', 'amount', 'total_th', 'status',
-                    'post_w']
+    list_display = ['user_name', 'address_city', 'address_ostsn', 'address_phone', 'amount', 'code', 'total_th', 'status', 'post_w']
     list_filter = ['status']
     fields = (
-        'status', 'admin_note', 'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address',
+        'code', 'status', 'admin_note', 'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address',
         'amount', 'total_th', 'post_w', 'post_p', 'ip', 'ref_id', 'authority', 'paid')
     readonly_fields = (
-        'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address', 'amount', 'total_th',
+        'code', 'user_name', 'address_full_name', 'address_ostsn', 'address_city', 'address_address', 'amount', 'total_th',
         'post_w', 'post_p','ip', 'ref_id', 'authority', 'paid')
     can_delete = False
     inlines = [OrderProductline]
