@@ -121,19 +121,42 @@ def ZarinpalGateway(request):
 @login_required(login_url='/login')
 def PaymentVerify(request,ordercode):
     current_user = request.user
-
-    # find shop carts
+    selected_post_way = PostWay.objects.get(selected=True)
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
+
+    totalPrice = 0
+    totalCount = 0
+    totalPriceWithPost = 0
+    for rs in shopcart:
+        # check the variant is status active
+        variants = Variants.objects.filter(product_id=rs.product_id, status='True')
+        if rs.product.variant == 'None' or variants.count() == 0:
+            totalPrice += rs.product.price * rs.quantity
+            totalPriceWithPost = totalPrice + selected_post_way.price
+            totalCount += rs.quantity
+        else:
+            totalPrice += rs.variant.price * rs.quantity
+            totalPriceWithPost = totalPrice + selected_post_way.price
+            totalCount += rs.quantity
 
     if request.method == 'GET':
         status = request.GET.get('Status')
         authority = request.GET.get('Authority')
         order = Order.objects.get(code=ordercode)
 
+        context = {
+            'current_user': current_user,
+            'shopcart': shopcart,
+            'totalPrice': totalPrice,
+            'totalCount': totalCount,
+            'totalPriceWithPost': totalPriceWithPost,
+            'order': order,
+        }
+
         if not authority or status != "OK":
             order.delete()
-            #return redirect('https://app.studyways.ir/dashboard/student/callback?success=notok')
-            return HttpResponse("payment faild...", content_type='text/plain')
+            return render(request, 'order/shopping_notcomplete.html', context)
+
 
         data = {
             "MerchantID": settings.ZARRINPAL_MERCHANT_ID,
@@ -184,8 +207,8 @@ def PaymentVerify(request,ordercode):
                 ShopCart.objects.filter(user_id=current_user.id).delete()  # Clear & Delete shopcart
                 request.session['cart_items'] = 0
 
-                #return redirect(f'https://app.studyways.ir/dashboard/student/callback?success=ok&payment_id={response["RefID"]}')
-                return HttpResponse("payment done, RefID={}".format(response['RefID']), content_type='text/plain')
+                return render(request, 'order/shopping_complete.html', context)
+
             else:
                 return SuccessResponse(data={'status': False, 'details': 'Subscription already paid'})
         return SuccessResponse(data=response.content)

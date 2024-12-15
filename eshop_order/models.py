@@ -84,7 +84,6 @@ class Order(models.Model):
     admin_note = models.CharField(blank=True, max_length=100, verbose_name='یادداشت ادمین')
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='ایجاد شده')
     update_at = models.DateTimeField(auto_now=True, verbose_name='آخرین آپدیت')
-
     ref_id = models.CharField(max_length=256, null=True, blank=True)
     authority = models.CharField(max_length=256, null=True, blank=True)
     paid = models.BooleanField(default=False)
