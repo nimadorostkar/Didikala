@@ -44,9 +44,7 @@
             <div class="row">
                 <div class="col-12 col-md-6 col-lg-3">
                     <div class="widget-menu widget card">
-                        <header class="card-header">
-                            <h3 class="card-title"> Atrotech  </h3>
-                        </header>
+
                         <ul class="footer-menu">
                             <li>
                                 <a href="/contact_us"> تماس با ما  </a>
@@ -64,20 +62,26 @@
     <div class="description">
         <div class="container main-container">
             <div class="row">
-                <div class="site-description col-12 col-lg-8">
+                <div class="site-description col-12 col-lg-10">
                     <h1 class="site-title">{{ site_info.title }}</h1>
                     <p>
-                           با برخوردارى از نيروى انسانى متخصص و پشتوانه علمى و تجربى، با استفاده از آخرين روش هاى فن آورى و مهندسى موفق به ارائه خدمات گسترده و با كيفيت براى مشتريان گرديده .توسعه و بالندگی از طریق بازنگری اهداف، تدوین برنامه‌ها، اولویت‌بندی فعالیت‌ها و بهبود مستمر سرمشق شرکت مهندسى آتروتك بوده و دستیابی به این اهداف، نیازمند ترویج فرهنگ تعالی، حفظ و بهبود ارزش‌ها و اصول اخلاقی شركت و رعایت مسئولیت‌های اجتماعی است.
+                        {{ site_info.aboutus|safe }}
                     </p>
                 </div>
 
-                <div class="site-description col-12 col-lg-2">
-                    <img src="{% static 'images/symbol-02.png' %}">
-                </div>
 
-                <div class="site-description col-12 col-lg-2">
-                    <img src="{% static 'images/symbol-01.png' %}">
-                </div>
+                {% if site_info.enemad %}
+                    <div class="site-description col-12 col-lg-2">
+                        <img src="{% static image_link %}">
+                    </div>
+                {% else %}
+                    <div class="site-description col-12 col-lg-2">
+                     <img src="{% static 'images/symbol-02.png' %}">
+                    </div>
+                {% endif %}
+
+
+
 
             </div>
         </div>
@@ -85,7 +89,7 @@
     <div class="copyright">
         <div class="container main-container">
             <p class="text-danger">
-               <a class="footer-bottom-text font-second" href="www.atrotech.ir" target="_blank">Atrotech © 2020. All Right Reserved</a>
+               <a class="footer-bottom-text font-second" href="{{ site_info.domain }}" target="_blank"> {{ site_info.title }} ©2025   All Right Reserved</a>
             </p>
         </div>
     </div>

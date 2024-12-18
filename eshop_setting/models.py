@@ -29,6 +29,7 @@ class SiteSetting(models.Model):
         ('True', 'True'),
         ('False', 'False'),
     )
+    domain = models.CharField(max_length=150, blank=True)
     title = models.CharField(max_length=150, verbose_name='عنوان')
     keywords = models.CharField(max_length=255, verbose_name='کلمه کلیدی')
     description = models.CharField(max_length=255, verbose_name='توضیحات')
@@ -52,6 +53,7 @@ class SiteSetting(models.Model):
     contact = RichTextUploadingField(blank=True, verbose_name='تماس با ما')
     references = RichTextUploadingField(blank=True, verbose_name='رفرنس')
     status = models.CharField(max_length=10, choices=STATUS, verbose_name='وضعیت')
+    enemad = models.ImageField(upload_to=upload_image_path,blank=True)
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
     update_at = models.DateTimeField(auto_now=True, verbose_name='آخرین آپدیت')
 

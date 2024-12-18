@@ -12,6 +12,7 @@ from eshop_variant.models import Variants
 
 
 def header(request, *args, **kwargs):
+    site_info = SiteSetting.objects.filter(status=True).first()
     category = Category.objects.filter(status=True)
     ancestors = category.get_ancestors()
     current_user = request.user  # Access User Session information
@@ -29,6 +30,7 @@ def header(request, *args, **kwargs):
             totalCount += rs.quantity
 
     context = {
+        'site_info': site_info,
         'category': category,
         'ancestors': ancestors,
         'shopcart': shopcart,
