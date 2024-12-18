@@ -46,7 +46,6 @@ def footer(request, *args, **kwargs):
     context = {
         'site_info': site_info
     }
-
     return render(request, 'shared/Footer.html', context)
 
 

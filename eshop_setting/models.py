@@ -43,7 +43,6 @@ class SiteSetting(models.Model):
     smtpemail = models.CharField(blank=True, max_length=50)
     smtppassword = models.CharField(blank=True, max_length=10)
     smtpport = models.CharField(blank=True, max_length=5)
-    logo = models.ImageField(blank=True, upload_to=upload_image_path, verbose_name='لوگو')
     facebook = models.CharField(blank=True, max_length=50, verbose_name='فیسبوک')
     instagram = models.CharField(blank=True, max_length=50, verbose_name='اینستاگرام')
     twitter = models.CharField(blank=True, max_length=50, verbose_name='توئیتر')
@@ -53,7 +52,8 @@ class SiteSetting(models.Model):
     contact = RichTextUploadingField(blank=True, verbose_name='تماس با ما')
     references = RichTextUploadingField(blank=True, verbose_name='رفرنس')
     status = models.CharField(max_length=10, choices=STATUS, verbose_name='وضعیت')
-    enemad = models.ImageField(upload_to=upload_image_path,blank=True)
+    logo = models.ImageField(blank=True, upload_to=upload_image_path, verbose_name='لوگو')
+    enemad_code = models.TextField(blank=True)
     create_at = models.DateTimeField(auto_now_add=True, verbose_name='زمان ایجاد')
     update_at = models.DateTimeField(auto_now=True, verbose_name='آخرین آپدیت')
 
