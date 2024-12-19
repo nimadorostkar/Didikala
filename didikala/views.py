@@ -7,7 +7,7 @@ from eshop_category.models import Category
 from eshop_order.models import ShopCart
 from eshop_product.models import Product
 from eshop_setting.models import SiteSetting
-from eshop_slider.models import Slider
+from eshop_slider.models import Slider,BannerRight,BannerLeft
 from eshop_variant.models import Variants
 
 
@@ -56,6 +56,8 @@ def my_grouper(n, iterable):
 
 def home_page(request):
     site_info = SiteSetting.objects.filter(status=True).first()
+    banner_right = BannerRight.objects.all().last()
+    banner_left = BannerLeft.objects.all().last()
     sliders = Slider.objects.all()
     product_all_sale = Product.objects.filter(category__in=Category.objects.get(slug='digital-product') \
                                               .get_descendants(include_self=True), status=True).order_by('-all_sale')[:7]
@@ -67,6 +69,8 @@ def home_page(request):
     all_barand = Brand.objects.all()
     context = {
         'sliders': sliders,
+        'banner_right': banner_right,
+        'banner_left': banner_left,
         'product_latest': product_latest,
         'product_picked': product_picked,
         'grouped_product': grouped_product,
