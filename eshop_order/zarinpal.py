@@ -19,7 +19,7 @@ from eshop_order.forms import ShopCartForm, PostWayForm, PayWayForm
 from eshop_order.models import ShopCart, Order, OrderProduct, PostWay
 from eshop_product.models import Product
 from eshop_variant.models import Variants
-
+from eshop_setting.models import SiteSetting
 
 
 
@@ -120,6 +120,7 @@ def ZarinpalGateway(request):
 
 @login_required(login_url='/login')
 def PaymentVerify(request,ordercode):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
     selected_post_way = PostWay.objects.get(selected=True)
     shopcart = ShopCart.objects.filter(user_id=current_user.id)
@@ -145,6 +146,7 @@ def PaymentVerify(request,ordercode):
         order = Order.objects.get(code=ordercode)
 
         context = {
+            'site_info': site_info,
             'current_user': current_user,
             'shopcart': shopcart,
             'totalPrice': totalPrice,

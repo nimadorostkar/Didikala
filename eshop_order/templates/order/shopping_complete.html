@@ -35,7 +35,7 @@
                 <div class="col-12 text-center pt-2">
                     <div class="header-shopping-logo dt-sl">
                         <a href="/">
-                            <img src="{% static 'images/logo.png' %}" alt="">
+                            <img src="{{ site_info.logo.url }}" alt="Logo" height="50">
                         </a>
                     </div>
                 </div>
@@ -201,22 +201,17 @@
                 <div class="col-md-6 col-sm-12 text-left">
                     <i class="mdi mdi-phone-outline"></i>
                     شماره تماس : <a href="#">
-                    ۶۱۹۳۰۰۰۰
-                    - ۰۲۱
+                    {{ site_info.phone }}
                 </a>
                 </div>
                 <div class="col-md-6 col-sm-12 text-right">
                     <i class="mdi mdi-email-outline"></i>
-                    آدرس ایمیل : <a href="#">info@gmail.com</a>
+                    آدرس ایمیل : <a href="#"> {{ site_info.email }} </a>
                 </div>
-                <div class="col-12 text-center mt-2">
-                    <p class="text-secondary text-footer">
-                        استفاده از کارت هدیه یا کد تخفیف، درصفحه ی پرداخت امکان پذیر است.
-                    </p>
-                </div>
+                <br>
                 <div class="col-12 text-center">
                     <div class="copy-right-mini-footer">
-                        Copyright © 2019 Didikala
+                        Copyright © 2025 {{ site_info.title }}
                     </div>
                 </div>
             </div>

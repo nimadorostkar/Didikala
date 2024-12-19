@@ -11,6 +11,8 @@ from eshop_order.forms import ShopCartForm, PostWayForm, PayWayForm
 from eshop_order.models import ShopCart, Order, OrderProduct, PostWay
 from eshop_product.models import Product
 from eshop_variant.models import Variants
+from eshop_setting.models import SiteSetting
+
 
 
 @login_required(login_url='/login')  # Check login
@@ -117,6 +119,7 @@ def shopcart(request):
 
 @login_required(login_url='/login')  # Check login
 def shipping_page(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
 
     # find address and choose
@@ -154,6 +157,7 @@ def shipping_page(request):
             totalCount += rs.quantity
 
     context = {
+        'site_info': site_info,
         'current_user': current_user,
         'profile': profile,
         'addresses': addresses,
@@ -186,6 +190,7 @@ def way_selected(request, id):
 
 @login_required(login_url='/login')  # Check login
 def pay_page(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
 
     # find address and choose
@@ -214,6 +219,7 @@ def pay_page(request):
 
     forms = PayWayForm()
     context = {
+        'site_info': site_info,
         'current_user': current_user,
         'selected_address': selected_address,
         'shopcart': shopcart,
@@ -231,6 +237,7 @@ def pay_page(request):
 
 @login_required(login_url='/login')  # Check login
 def order_completed(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
 
     # find address and choose
@@ -315,6 +322,7 @@ def order_completed(request):
         order = Order.objects.filter(user_id=current_user.id).last()
 
     context = {
+        'site_info': site_info,
         'current_user': current_user,
         'shopcart': shopcart,
         'totalPrice': totalPrice,
