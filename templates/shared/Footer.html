@@ -69,22 +69,15 @@
                     </p>
                 </div>
 
-               {{ site_info.enemad_code|safe }}
-
-
-            <!--
-                {% if site_info.enemad %}
+                {% if site_info.enemad_code %}
                     <div class="site-description col-12 col-lg-2">
-                        <img src="{{ enamed_url }}" height="80">
+                        {{ site_info.enemad_code|safe }}
                     </div>
                 {% else %}
                     <div class="site-description col-12 col-lg-2">
                      <img src="{% static 'images/symbol-02.png' %}">
                     </div>
                 {% endif %}
-            -->
-
-
 
             </div>
         </div>

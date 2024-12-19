@@ -55,6 +55,7 @@ def my_grouper(n, iterable):
 
 
 def home_page(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     sliders = Slider.objects.all()
     product_all_sale = Product.objects.filter(category__in=Category.objects.get(slug='digital-product') \
                                               .get_descendants(include_self=True), status=True).order_by('-all_sale')[:7]
@@ -71,5 +72,6 @@ def home_page(request):
         'grouped_product': grouped_product,
         'product_all_sale': product_all_sale,
         'all_barand': all_barand,
+        'site_info': site_info
     }
     return render(request, 'home_page.html', context)
