@@ -284,6 +284,7 @@ def product_detail(request, product_id, slug):
 
 
 
+
 def ajaxcolor(request):
     data = {}
     if request.POST.get('action') == 'post':
@@ -302,3 +303,4 @@ def ajaxcolor(request):
         data = {'rendered_table': render_to_string('product/color_list.html', context=context)}
         return JsonResponse(data)
     return JsonResponse(data)
+
