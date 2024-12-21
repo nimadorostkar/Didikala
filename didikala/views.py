@@ -59,10 +59,9 @@ def home_page(request):
     banner_right = BannerRight.objects.all().last()
     banner_left = BannerLeft.objects.all().last()
     sliders = Slider.objects.all()
-    product_all_sale = Product.objects.filter(category__in=Category.objects.get(slug='digital-product') \
-                                              .get_descendants(include_self=True), status=True).order_by('-all_sale')[:7]
+    #product_all_sale = Product.objects.filter(category__in=Category.objects.get(slug='women-clothing').get_descendants(include_self=True), status=True).order_by('-all_sale')[:7]
     product_latest = Product.objects.filter(status=True).order_by('-id')[:7]
-    # product_all_sale = Product.objects.all().order_by('all_sale')[:7]
+    product_all_sale = Product.objects.all().order_by('all_sale')[:7]
     product_picked = Product.objects.filter(status=True).order_by('?')[:7]
     product_group = Product.objects.filter(status=True).order_by('?')[:9]
     grouped_product = list(my_grouper(3, product_group))

@@ -285,74 +285,32 @@
             <!-- Start Main-Slider -->
             <div class="row mb-5">
 
-                <div class="col-xl-5 col-lg-12 col-12 order-1 order-lg-2">
-                    <!-- Start main-slider -->
-                    <section class="main-slider carousel slide carousel-fade card hidden-sm" data-ride="carousel">
+                <div class="col-xl-4 col-lg-12 col-12 order-1 order-lg-2">
+                    <section   class="main-slider carousel slide carousel-fade card hidden-sm" data-ride="carousel">
                         <div class="carousel-inner">
-                            <a class="main-slider-slide" href="{{ slide.link }}">
-                                <img src="{{ banner_right.image.url }}">
-                            </a>
+                            {% for slide in sliders %}
+                                <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
+                                    <a class="main-slider-slide" href="{{ banner_left.link }}"
+                                       style="background-image: url({{ banner_right.image.url }}) ;height: 329px ">
+                                    </a>
+                                </div>
+                            {% endfor %}
                         </div>
                     </section>
-
-
-                    <!-- End main-slider -->
                 </div>
 
-                <div class="col-xl-7 col-lg-12 col-12 order-1 order-lg-2">
-                    <!-- Start main-slider -->
-                    <section id="main-slider" class="main-slider carousel slide carousel-fade card hidden-sm"
-                             data-ride="carousel">
-
-                        <ol class="carousel-indicators">
-                            {% for slide in sliders %}
-                                <li data-target="#main-slider" data-slide-to="{{ forloop.counter0 }}"
-                                    class="{{ forloop.first|yesno:'active,' }}"></li>
-                            {% endfor %}
-                        </ol>
+                <div class="col-xl-8 col-lg-12 col-12 order-1 order-lg-2">
+                    <section   class="main-slider carousel slide carousel-fade card hidden-sm" data-ride="carousel">
                         <div class="carousel-inner">
                             {% for slide in sliders %}
                                 <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
-                                    <a class="main-slider-slide" href="{{ slide.link }}"
-                                       style="background-image: url({{ slide.image.url }}) ;height: 329px ">
+                                    <a class="main-slider-slide" href="{{ banner_left.link }}"
+                                       style="background-image: url({{ banner_left.image.url }}) ;height: 329px ">
                                     </a>
                                 </div>
                             {% endfor %}
                         </div>
-                        <a class="carousel-control-prev" href="#main-slider" role="button" data-slide="prev">
-                            <i class="mdi mdi-chevron-right"></i>
-                        </a>
-                        <a class="carousel-control-next" href="#main-slider" data-slide="next">
-                            <i class="mdi mdi-chevron-left"></i>
-                        </a>
                     </section>
-                    <section id="main-slider-res"
-                             class="main-slider carousel slide carousel-fade card d-none show-sm" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            {% for slide in sliders %}
-                                <li data-target="#main-slider-res" data-slide-to="{{ forloop.counter0 }}"
-                                    class="{{ forloop.first|yesno:'active,' }}"></li>
-                            {% endfor %}
-                        </ol>
-                        <div class="carousel-inner">
-                            {% for slide in sliders %}
-                                <div class="carousel-item {{ forloop.first|yesno:'active,' }}">
-                                    <a class="main-slider-slide" href="{{ slide.link }}">
-                                        <img src="{{ slide.image.url }}" alt=""
-                                             class="img-fluid">
-                                    </a>
-                                </div>
-                            {% endfor %}
-                        </div>
-
-                        <a class="carousel-control-prev" href="#main-slider-res" role="button" data-slide="prev">
-                            <i class="mdi mdi-chevron-right"></i>
-                        </a>
-                        <a class="carousel-control-next" href="#main-slider-res" data-slide="next">
-                            <i class="mdi mdi-chevron-left"></i>
-                        </a>
-                    </section>
-                    <!-- End main-slider -->
                 </div>
             </div>
             <!-- End Main-Slider -->
