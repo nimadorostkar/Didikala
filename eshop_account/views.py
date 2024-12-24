@@ -1,7 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
@@ -17,12 +13,15 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.models import User
 from .models import UserProfile, UserAddress, History
 from django.views.generic.detail import SingleObjectMixin
+from eshop_setting.models import SiteSetting
 
 
 def login_user(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     url = request.META.get('HTTP_REFERER')  # get last url
     form = LoginForm(request.POST or None)
     context = {
+        'site_info': site_info,
         'form': form
     }
 
@@ -41,6 +40,7 @@ def login_user(request):
 
 
 def register(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     if request.user.is_authenticated:
         return redirect('/')
     register_form = RegisterForm(request.POST or None)
@@ -57,6 +57,7 @@ def register(request):
         data.save()
         return HttpResponseRedirect(request.GET.get('next', reverse('home')))
     context = {
+        'site_info': site_info,
         'register_form': register_form
     }
     return render(request, 'account/register.html', context)
@@ -88,11 +89,13 @@ def profile_sidebar(request):
 
 @login_required(login_url='/login')
 def profile_page(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
     profile = UserProfile.objects.filter(user__username=current_user).first()
     orders = Order.objects.filter(user_id=current_user.id).order_by('-id')[:3]
     favourites = Product.objects.filter(favourite=request.user, status=True).order_by('-id')[:3]
     context = {
+        'site_info': site_info,
         'current_user': current_user,
         'profile': profile,
         'orders': orders,
@@ -103,9 +106,11 @@ def profile_page(request):
 
 @login_required(login_url='/login')
 def profile_info(request):
+    site_info = SiteSetting.objects.filter(status=True).first()
     current_user = request.user
     profile = UserProfile.objects.filter(user__username=current_user).first()
     context = {
+        'site_info': site_info,
         'current_user': current_user,
         'profile': profile,
     }

@@ -30,7 +30,7 @@
                     <div class="col-12 text-center">
                         <div class="logo-area-mini-header">
                             <a href="#">
-                                <img src="{% static 'images/logo.png' %}" alt="">
+                                <img src="{{ site_info.logo.url }}" alt="Logo" height="50">
                             </a>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                     <div class="col-xl-4 col-lg-5 col-md-7 col-12 mx-auto">
                         <div class="form-ui dt-sl dt-sn pt-4">
                             <div class="section-title title-wide mb-1 no-after-title-wide">
-                                <h2 class="font-weight-bold">ثبت نام در دیدیکالا</h2>
+                                <h2 class="font-weight-bold">ثبت نام در {{ site_info.title }}</h2>
                             </div>
 
                             <form action="" method="post">
@@ -98,7 +98,7 @@
                                 <div class="form-row mt-3">
                                     <button class="btn-primary-cm btn-with-icon mx-auto w-100">
                                         <i class="mdi mdi-account-circle-outline"></i>
-                                        ثبت نام در دیدیکالا
+                                        ثبت نام در {{ site_info.title }}
                                     </button>
                                 </div>
                                 <div class="form-footer text-right mt-3">
@@ -120,21 +120,21 @@
                 <div class="row">
                     <div class="col-12">
                         <ul class="mini-footer-menu">
-                            <li><a href="#">درباره دیدیکالا</a></li>
+                            <li><a href="/contact_us">درباره دیدیکالا</a></li>
                             <li><a href="#">فرصت های شغلی</a></li>
-                            <li><a href="#">تماس با ما</a></li>
+                            <li><a href="/contact_us">تماس با ما</a></li>
                             <li><a href="#">همکاری با سازمان ها</a></li>
                         </ul>
                     </div>
                     <div class="col-12 mt-2 mb-3">
                         <div class="footer-light-text">
-                            استفاده از مطالب فروشگاه اینترنتی دیدیکالا فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع
-                            است. کلیه حقوق این سایت متعلق به (فروشگاه آنلاین دیدیکالا) می‌باشد.
+                            استفاده از مطالب فروشگاه فقط برای مقاصد غیرتجاری و با ذکر منبع بلامانع
+                            است. کلیه حقوق این سایت متعلق به ({{ site_info.title }}) می‌باشد.
                         </div>
                     </div>
                     <div class="col-12 text-center">
                         <div class="copy-right-mini-footer">
-                            Copyright © 2019 Didikala
+                            Copyright © 2025 {{ site_info.copy_right }}
                         </div>
                     </div>
                 </div>
